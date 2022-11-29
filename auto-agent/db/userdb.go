@@ -1,12 +1,11 @@
 package db
 
 import (
-	"appengine"
-	"appengine/datastore"
+	"context"
 	"errors"
-	// "fmt"
-	// "os"
 	"time"
+
+	"google.golang.org/appengine/datastore"
 )
 
 const (
@@ -57,42 +56,42 @@ type Message struct {
 // }
 
 // userlistKey returns the key used for all user entries.
-func UserLogsKey(c appengine.Context, username string) *datastore.Key {
+func UserLogsKey(c context.Context, username string) *datastore.Key {
 	return datastore.NewKey(c, "Logs", username, 0, nil)
 }
 
 // userlistKey returns the key used for all user entries.
-func UserHistoryKey(c appengine.Context, username string) *datastore.Key {
+func UserHistoryKey(c context.Context, username string) *datastore.Key {
 	return datastore.NewKey(c, "History", username, 0, nil)
 }
 
 // userlistKey returns the key used for all user entries.
-func UserMemoKey(c appengine.Context, username string) *datastore.Key {
+func UserMemoKey(c context.Context, username string) *datastore.Key {
 	return datastore.NewKey(c, "Memo", username, 0, nil)
 }
 
 // userlistKey returns the key used for all user entries.
-// func UserApplicantKey(c appengine.Context, username string) *datastore.Key {
+// func UserApplicantKey(c context.Context, username string) *datastore.Key {
 // 	return datastore.NewKey(c, "Applicant", username, 0, nil)
 // }
 
 // userKey returns the key used for all user entries.
-func UserKey(c appengine.Context) *datastore.Key {
+func UserKey(c context.Context) *datastore.Key {
 	return datastore.NewIncompleteKey(c, "User", UserListKey(c))
 }
 
 // userListKey returns the key used as the ancestor for all user entries.
-func UserListKey(c appengine.Context) *datastore.Key {
+func UserListKey(c context.Context) *datastore.Key {
 	// The string "default_guestbook" here could be varied to have multiple guestbooks.
 	return datastore.NewKey(c, "UserList", "default_userlist", 0, nil)
 }
 
-func PutUser(c appengine.Context, u User, key *datastore.Key) (err error) {
+func PutUser(c context.Context, u User, key *datastore.Key) (err error) {
 	_, err = datastore.Put(c, key, &u)
 	return
 }
 
-func GetUser(c appengine.Context, username string) (u User, k *datastore.Key, err error) {
+func GetUser(c context.Context, username string) (u User, k *datastore.Key, err error) {
 	q := datastore.NewQuery("User").Ancestor(UserListKey(c)).
 		Filter("Username=", username)
 
@@ -111,7 +110,7 @@ func GetUser(c appengine.Context, username string) (u User, k *datastore.Key, er
 	return
 }
 
-func GetHistory(c appengine.Context, username string) (messages []*Message, count int, err error) {
+func GetHistory(c context.Context, username string) (messages []*Message, count int, err error) {
 	var offset int
 	count, err = GetHistoryCount(c, username)
 	if err != nil {
@@ -129,13 +128,13 @@ func GetHistory(c appengine.Context, username string) (messages []*Message, coun
 	return
 }
 
-func GetHistoryCount(c appengine.Context, username string) (count int, err error) {
+func GetHistoryCount(c context.Context, username string) (count int, err error) {
 	q := datastore.NewQuery("Message").Ancestor(UserHistoryKey(c, username))
 	count, err = q.Count(c)
 	return
 }
 
-func PutMemo(c appengine.Context, username string, m Memo) (err error) {
+func PutMemo(c context.Context, username string, m Memo) (err error) {
 	memos := []Memo{m}
 	var keys = []*datastore.Key{
 		datastore.NewIncompleteKey(c, "Memo", UserMemoKey(c, username))}
@@ -144,7 +143,7 @@ func PutMemo(c appengine.Context, username string, m Memo) (err error) {
 	return
 }
 
-// func PutApplicant(c appengine.Context, username string, a Applicant) (err error) {
+// func PutApplicant(c context.Context, username string, a Applicant) (err error) {
 // 	applicants := []Applicant{a}
 // 	var keys = []*datastore.Key{
 // 		datastore.NewIncompleteKey(c, "Applicant", UserApplicantKey(c, username))}

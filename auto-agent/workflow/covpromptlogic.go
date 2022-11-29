@@ -1,16 +1,16 @@
 package workflow
 
 import (
-	"db"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"strings"
-
-	"appengine"
 	"time"
+
+	"github.com/toisin/astro-world/auto-agent/db"
 )
 
 // Prompt logics specific to Cov phase
@@ -28,7 +28,7 @@ func MakeCovPrompt(p PromptConfig, uiUserData *UIUserData) *CovPrompt {
 	return n
 }
 
-func (cp *CovPrompt) ProcessResponse(r string, u *db.User, uiUserData *UIUserData, c appengine.Context) {
+func (cp *CovPrompt) ProcessResponse(r string, u *db.User, uiUserData *UIUserData, c context.Context) {
 	if cp.promptConfig.ResponseType == RESPONSE_END {
 		cp.nextPrompt = cp.generateFirstPromptInNextSequence(uiUserData)
 	} else if r != "" {
@@ -142,8 +142,8 @@ func (cp *CovPrompt) ProcessResponse(r string, u *db.User, uiUserData *UIUserDat
 	}
 }
 
-// func (cp *CovPrompt) checkRecords(rsr *UIRecordsSelectResponse, currentFactorId string, c appengine.Context) {
-func (cp *CovPrompt) checkRecords(rsr *UIRecordsSelectResponse, c appengine.Context) {
+// func (cp *CovPrompt) checkRecords(rsr *UIRecordsSelectResponse, currentFactorId string, c context.Context) {
+func (cp *CovPrompt) checkRecords(rsr *UIRecordsSelectResponse, c context.Context) {
 	currentFactorId := cp.state.GetTargetFactor().FactorId
 	rsr.NonVaryingFactorIds = make([]string, len(appConfig.CovPhase.ContentRef.Factors))
 	rsr.VaryingFactorIds = make([]string, len(appConfig.CovPhase.ContentRef.Factors))

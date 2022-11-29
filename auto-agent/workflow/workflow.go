@@ -11,8 +11,7 @@ import (
 	"os"
 	"strconv"
 
-	"db"
-	// "strings"
+	"github.com/toisin/astro-world/auto-agent/db"
 )
 
 const (
@@ -72,7 +71,7 @@ const (
 	// 1. id must be unique and are treated as case insensitive.
 	// 2. reference to an already defined prompt by specifying the id only, otherwise, the last definition is used
 	// 3. if there is only one expected response, ExpectedResponses, it becomes the default next prompt
-	promptTreeJsonFile = "workflow.json"
+	promptTreeJsonFile = "auto-agent/workflow.json"
 )
 
 type AppConfig struct {

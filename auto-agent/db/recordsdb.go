@@ -1,14 +1,13 @@
 package db
 
 import (
-	"appengine"
-	"appengine/datastore"
-
+	"context"
 	"fmt"
-	"os"
-
 	"math/rand"
+	"os"
 	"time"
+
+	"google.golang.org/appengine/datastore"
 )
 
 // Currently hardcoded only 5 factors possible
@@ -33,17 +32,17 @@ type Record struct {
 }
 
 // RecordKey returns the key used for all records.
-func RecordKey(c appengine.Context, appname string) *datastore.Key {
+func RecordKey(c context.Context, appname string) *datastore.Key {
 	return datastore.NewKey(c, "Records", appname, 0, nil)
 }
 
-func GetAllRecords(c appengine.Context) (records []Record, ks []*datastore.Key, err error) {
+func GetAllRecords(c context.Context) (records []Record, ks []*datastore.Key, err error) {
 	q := datastore.NewQuery("Record")
 	ks, err = q.GetAll(c, &records)
 	return
 }
 
-func GetRecord(c appengine.Context, factorLevels []string) (r Record, k *datastore.Key, err error) {
+func GetRecord(c context.Context, factorLevels []string) (r Record, k *datastore.Key, err error) {
 
 	q := datastore.NewQuery("Record")
 	for i := range factorLevels {
@@ -79,7 +78,7 @@ func GetRecord(c appengine.Context, factorLevels []string) (r Record, k *datasto
 	return
 }
 
-func GetRecordByRecordNo(c appengine.Context, recordNo int) (r Record, k *datastore.Key, err error) {
+func GetRecordByRecordNo(c context.Context, recordNo int) (r Record, k *datastore.Key, err error) {
 
 	q := datastore.NewQuery("Record")
 	q = q.Filter("RecordNo=", recordNo)
