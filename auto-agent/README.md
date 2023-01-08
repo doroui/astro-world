@@ -14,8 +14,26 @@ https://cloud.google.com/sdk/docs/install
 dev_appserver.py app.yaml
 ```
 
+## NPM
+
+```cli
+npm install
+```
+
 ## JSX to JS
 
 ```cli
-npx esbuild auto-agent/static/astro-world/jsx/*.jsx --outdir=auto-agent/static/astro-world/js
+npm run build
+```
+
+or
+
+```cli
+npm run build:watch
+```
+
+## Format JSX
+
+```
+npm run format
 ```

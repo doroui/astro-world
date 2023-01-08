@@ -10,23 +10,23 @@
  *
  */
 // Based off https://github.com/ForbesLindesay/umd/blob/master/template.js
-;(function(f) {
+(function (f) {
   // CommonJS
-  if (typeof exports === "object" && typeof module !== "undefined") {
+  if (typeof exports === 'object' && typeof module !== 'undefined') {
     module.exports = f(require('react'));
 
-  // RequireJS
-  } else if (typeof define === "function" && define.amd) {
+    // RequireJS
+  } else if (typeof define === 'function' && define.amd) {
     define(['react'], f);
 
-  // <script>
+    // <script>
   } else {
     var g;
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       g = window;
-    } else if (typeof global !== "undefined") {
+    } else if (typeof global !== 'undefined') {
       g = global;
-    } else if (typeof self !== "undefined") {
+    } else if (typeof self !== 'undefined') {
       g = self;
     } else {
       // works providing we're not in "use strict";
@@ -36,7 +36,6 @@
     }
     g.ReactDOM = f(g.React);
   }
-
-})(function(React) {
+})(function (React) {
   return React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 });

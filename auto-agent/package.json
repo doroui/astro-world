@@ -1,0 +1,30 @@
+{
+  "name": "auto-agent",
+  "version": "1.0.0",
+  "description": "### Go",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint static/",
+    "build": "esbuild static/astro-world/jsx/* --outdir=static/astro-world/js",
+    "build:watch": "esbuild static/astro-world/jsx/* --outdir=static/astro-world/js --watch",
+    "format": "prettier --write static/astro-world/*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "esbuild": "^0.16.15",
+    "prettier": "^2.8.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.31.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  }
+}
