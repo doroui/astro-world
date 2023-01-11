@@ -220,7 +220,7 @@ func WriteWorkflowText(w http.ResponseWriter) {
 		log.Fatal("Cannot write file", err)
 	}
 
-	for i, _ := range covPhaseConfig.OrderedSequences {
+	for i := range covPhaseConfig.OrderedSequences {
 		writePromptInText("", covPhaseConfig.OrderedSequences[i].FirstPrompt, writer, 0, ExpectedResponseValue{})
 	}
 
@@ -229,7 +229,7 @@ func WriteWorkflowText(w http.ResponseWriter) {
 		log.Fatal("Cannot write file", err)
 	}
 
-	for i, _ := range chartPhaseConfig.OrderedSequences {
+	for i := range chartPhaseConfig.OrderedSequences {
 		writePromptInText("", chartPhaseConfig.OrderedSequences[i].FirstPrompt, writer, 0, ExpectedResponseValue{})
 	}
 
@@ -238,7 +238,7 @@ func WriteWorkflowText(w http.ResponseWriter) {
 		log.Fatal("Cannot write file", err)
 	}
 
-	for i, _ := range predictionPhaseConfig.OrderedSequences {
+	for i := range predictionPhaseConfig.OrderedSequences {
 		writePromptInText("", predictionPhaseConfig.OrderedSequences[i].FirstPrompt, writer, 0, ExpectedResponseValue{})
 	}
 
@@ -293,15 +293,15 @@ func InitWorkflow() {
 		chartPhaseConfig := appConfig.ChartPhase
 		predictionPhaseConfig := appConfig.PredictionPhase
 		populateSupportPromptConfigMap(covPhaseConfig.SupportPrompts, covPhaseConfig.Id)
-		for i, _ := range covPhaseConfig.OrderedSequences {
+		for i := range covPhaseConfig.OrderedSequences {
 			populatePromptConfigMap(&covPhaseConfig.OrderedSequences[i].FirstPrompt, covPhaseConfig.Id, i)
 		}
 		populateSupportPromptConfigMap(chartPhaseConfig.SupportPrompts, chartPhaseConfig.Id)
-		for i, _ := range chartPhaseConfig.OrderedSequences {
+		for i := range chartPhaseConfig.OrderedSequences {
 			populatePromptConfigMap(&chartPhaseConfig.OrderedSequences[i].FirstPrompt, chartPhaseConfig.Id, i)
 		}
 		populateSupportPromptConfigMap(predictionPhaseConfig.SupportPrompts, predictionPhaseConfig.Id)
-		for i, _ := range predictionPhaseConfig.OrderedSequences {
+		for i := range predictionPhaseConfig.OrderedSequences {
 			populatePromptConfigMap(&predictionPhaseConfig.OrderedSequences[i].FirstPrompt, predictionPhaseConfig.Id, i)
 		}
 

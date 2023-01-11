@@ -710,7 +710,7 @@ func GetAllPerformanceRecords(records []db.Record) []Performance {
 			pd[i].Grade = appConfig.Content.OutcomeVariable.Levels[i].Name
 			pd[i].Records = make(map[string][]RecordState)
 		}
-		for k, _ := range pd[i].Records {
+		for k := range pd[i].Records {
 			pd[i].Records[k] = pd[i].Records[k][0:counts[i][k]]
 		}
 	}

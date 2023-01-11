@@ -396,13 +396,13 @@ func (covH *ResponseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		rc2 := rc
 
 		m := []db.Message{
-			db.Message{
+			{
 				Texts:     texts,
 				Mtype:     db.ROBOT,
 				Date:      time.Now(),
 				MessageNo: rc1,
 			},
-			db.Message{
+			{
 				Id:        responseId,
 				Texts:     []string{responseText},
 				Mtype:     db.HUMAN,
@@ -488,7 +488,7 @@ func LogUserRequest(c context.Context, u db.User, r http.Request, isGetRequest b
 		jsonResponse = r.FormValue("jsonResponse")
 	}
 	userlogs := []db.UserLog{
-		db.UserLog{
+		{
 			Username:     u.Username,
 			PromptId:     promptId,
 			PhaseId:      phaseId,

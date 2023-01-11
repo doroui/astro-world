@@ -181,7 +181,7 @@ func (cp *ChartPrompt) checkRecord(rsr *UIChartRecordSelectResponse, c context.C
 	if rsr.RecordNo != 0 {
 		record, _, err := db.GetRecordByRecordNo(c, rsr.RecordNo)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "DB Error Getting A Record with Record #:%s , %s!\n\n", rsr.RecordNo, err.Error())
+			fmt.Fprintf(os.Stderr, "DB Error Getting A Record with Record #:%d , %s!\n\n", rsr.RecordNo, err.Error())
 			log.Fatal(err)
 			return
 		}
