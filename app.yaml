@@ -1,2 +1,4 @@
 runtime: go115 # or another supported version
 main: auto-agent
+skip_files:
+  - .*/node_modules/.*
