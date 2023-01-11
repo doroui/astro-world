@@ -1,6 +1,6 @@
 {
   "Content": {
-    "RecordFileName": "cases.csv",
+    "RecordFileName": "auto-agent/cases.csv",
     "RecordSize": 120,
     "Factors": [
       {
@@ -443,17 +443,13 @@
         "Id": "decide_together",
         "ShowOnFirstPass": true,
         "RandomShowWithinNoOfPasses": 3,
-        "Text": [
-          "Be sure to talk to each other and agree on it."
-        ]
+        "Text": ["Be sure to talk to each other and agree on it."]
       },
       {
         "Id": "talk_to_partner",
         "ShowOnFirstPass": true,
         "RandomShowWithinNoOfPasses": 3,
-        "Text": [
-          "Be sure to talk with each other."
-        ]
+        "Text": ["Be sure to talk with each other."]
       }
     ],
     "OrderedSequences": [
@@ -959,7 +955,8 @@
                                                                         "NextPrompt": {
                                                                           "Id": "causal.uncontrolled.sure.2.2.1.2.1",
                                                                           "Text": [
-                                                                            "I see. Hmm... I am not convinced. I think you cannot tell whether {{.TargetFactor.FactorName}} makes a difference.","Maybe {{.RecordNoOne.FirstName}} has {{if eq .RecordNoOne.PerformanceLevel .RecordNoTwo.PerformanceLevel}}the same grade as {{.RecordNoTwo.FirstName}} because a bunch of things just happen to even out.{{else}}a {{if lt .RecordNoOne.PerformanceLevel .RecordNoTwo.PerformanceLevel}}higher{{else}}lower{{end}} grade than {{.RecordNoTwo.FirstName}} because {{.RecordNoTwo.FirstName}} has {{$otherFactorId := index .VaryingFactorIds 0}}{{$otherFactor := index .RecordNoTwo.FactorLevels $otherFactorId}}{{$otherFactor.SelectedLevel}} for {{$otherFactor.FactorName}} and {{.RecordNoOne.FirstName}} has {{$otherFactor := index .RecordNoOne.FactorLevels $otherFactorId}}{{$otherFactor.SelectedLevel}} for {{$otherFactor.FactorName}}.{{end}}"
+                                                                            "I see. Hmm... I am not convinced. I think you cannot tell whether {{.TargetFactor.FactorName}} makes a difference.",
+                                                                            "Maybe {{.RecordNoOne.FirstName}} has {{if eq .RecordNoOne.PerformanceLevel .RecordNoTwo.PerformanceLevel}}the same grade as {{.RecordNoTwo.FirstName}} because a bunch of things just happen to even out.{{else}}a {{if lt .RecordNoOne.PerformanceLevel .RecordNoTwo.PerformanceLevel}}higher{{else}}lower{{end}} grade than {{.RecordNoTwo.FirstName}} because {{.RecordNoTwo.FirstName}} has {{$otherFactorId := index .VaryingFactorIds 0}}{{$otherFactor := index .RecordNoTwo.FactorLevels $otherFactorId}}{{$otherFactor.SelectedLevel}} for {{$otherFactor.FactorName}} and {{.RecordNoOne.FirstName}} has {{$otherFactor := index .RecordNoOne.FactorLevels $otherFactorId}}{{$otherFactor.SelectedLevel}} for {{$otherFactor.FactorName}}.{{end}}"
                                                                           ],
                                                                           "PromptType": "STRAIGHT_THROUGH",
                                                                           "ResponseType": "Basic",
@@ -1013,9 +1010,7 @@
                                                         "Id": "Two records controlled",
                                                         "NextPrompt": {
                                                           "Id": "causal.controlled.2.2.1.3",
-                                                          "Text": [
-                                                            ""
-                                                          ],
+                                                          "Text": [""],
                                                           "PromptType": "STRAIGHT_THROUGH",
                                                           "ResponseType": "Basic",
                                                           "UIActionModeId": "RECORD_PERFORMANCE",
@@ -1794,17 +1789,13 @@
         "Id": "decide_together",
         "ShowOnFirstPass": true,
         "RandomShowWithinNoOfPasses": 3,
-        "Text": [
-          "Don't forget to talk to each other and agree on it."
-        ]
+        "Text": ["Don't forget to talk to each other and agree on it."]
       },
       {
         "Id": "talk_to_partner",
         "ShowOnFirstPass": true,
         "RandomShowWithinNoOfPasses": 3,
-        "Text": [
-          "Don't forget to talk with each other."
-        ]
+        "Text": ["Don't forget to talk with each other."]
       }
     ],
     "OrderedSequences": [
@@ -3121,9 +3112,7 @@
                                 ],
                                 "NextPrompt": {
                                   "Id": "non-causal.assume_chart.2",
-                                  "Text": [
-                                    "I see."
-                                  ],
+                                  "Text": ["I see."],
                                   "PromptType": "STRAIGHT_THROUGH",
                                   "ResponseType": "Basic",
                                   "UIActionModeId": "TARGET_FACTOR_RECORDS",
@@ -3216,9 +3205,7 @@
                                                 "Id": "ANY_RESPONSE",
                                                 "NextPrompt": {
                                                   "Id": "causal.assume_chart.1",
-                                                  "Text": [
-                                                    "I see."
-                                                  ],
+                                                  "Text": ["I see."],
                                                   "PromptType": "STRAIGHT_THROUGH",
                                                   "ResponseType": "Basic",
                                                   "UIActionModeId": "TARGET_FACTOR_RECORDS",
@@ -3657,9 +3644,7 @@
                                                         "Text": "Correct",
                                                         "NextPrompt": {
                                                           "Id": "wrong.wrong.correct.1.2.1.2",
-                                                          "Text": [
-                                                            "I see."
-                                                          ],
+                                                          "Text": ["I see."],
                                                           "PromptType": "STRAIGHT_THROUGH",
                                                           "ResponseType": "Basic",
                                                           "UIActionModeId": "TARGET_FACTOR_RECORDS",
@@ -3822,17 +3807,13 @@
         "Id": "decide_together",
         "ShowOnFirstPass": true,
         "RandomShowWithinNoOfPasses": 3,
-        "Text": [
-          "Don't forget to talk to each other and agree on it."
-        ]
+        "Text": ["Don't forget to talk to each other and agree on it."]
       },
       {
         "Id": "talk_to_partner",
         "ShowOnFirstPass": true,
         "RandomShowWithinNoOfPasses": 3,
-        "Text": [
-          "Don't forget to talk with each other."
-        ]
+        "Text": ["Don't forget to talk with each other."]
       }
     ],
     "OrderedSequences": [
@@ -4533,9 +4514,7 @@
                 "Id": "ANY_RESPONSE",
                 "NextPrompt": {
                   "Id": "done",
-                  "Text": [
-                    "Great!"
-                  ],
+                  "Text": ["Great!"],
                   "PromptType": "STRAIGHT_THROUGH",
                   "ResponseType": "COMPLETE",
                   "UIActionModeId": "SELECT_TEAM_SUMMARY"
