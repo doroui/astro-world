@@ -78,7 +78,6 @@ export class Dialog extends React.Component {
     user.gotoPhase(phase, jsonResponse, onComplete);
   }
   render() {
-    var state = this.state;
     var user = this.props.user;
     var app = this.props.app;
     var history = user.getHistory() ? user.getHistory() : {};
@@ -98,18 +97,16 @@ export class Dialog extends React.Component {
         ? user.getHistory().slice(oldHistoryLength)
         : {};
     }
-    var messages = newHistory.map(function (message, i) {
-      return (
-        <div key={i}>
-          <Message
-            texts={message.Texts}
-            mtype={message.Mtype}
-            app={app}
-            user={user}
-          />
-        </div>
-      );
-    });
+    var messages = newHistory.map((message, i) => (
+      <div key={i}>
+        <Message
+          texts={message.Texts}
+          mtype={message.Mtype}
+          app={app}
+          user={user}
+        />
+      </div>
+    ));
     var prompt = user.getPrompt();
     var welcomeText = this.state.welcomeText;
 
@@ -181,13 +178,11 @@ class OldHistory extends React.Component {
     var state = this.state;
     var user = this.props.user;
     var oldHistory = this.props.oldHistory ? this.props.oldHistory : {};
-    var messages = oldHistory.map(function (message, i) {
-      return (
-        <div key={i}>
-          <Message texts={message.Texts} mtype={message.Mtype} user={user} />
-        </div>
-      );
-    });
+    var messages = oldHistory.map((message, i) => (
+      <div key={i}>
+        <Message texts={message.Texts} mtype={message.Mtype} user={user} />
+      </div>
+    ));
     if (messages.length > 0) {
       if (state.showMessages) {
         return (
@@ -237,7 +232,7 @@ class MessageText extends React.Component {
     // e.scrollIntoView();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     // var e = ReactDOM.findDOMNode(this);
     // e.scrollIntoView();
   }
@@ -264,7 +259,7 @@ class MessageText extends React.Component {
           </div>
         );
       }
-      console.error('Unknown sender!', error);
+      console.error('Unknown sender!');
       return (
         <div className="researcher">
           <div className="message">{this.props.message.Text}</div>
@@ -308,7 +303,7 @@ class Message extends React.Component {
     this.refreshAfterDelay();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     this.refreshAfterDelay();
   }
 
@@ -346,7 +341,7 @@ class Message extends React.Component {
       lastCount = this.state.count;
     }
 
-    var messages = texts.slice(0, lastCount).map(function (text, i) {
+    var messages = texts.slice(0, lastCount).map((text, i) => {
       var message = {};
       message.Mtype = mtype;
       message.Text = text;
@@ -364,7 +359,7 @@ class Message extends React.Component {
 class Prompt extends React.Component {
   state = {completePrompt: false};
 
-  handleChange = event => {
+  handleChange = () => {
     this.setState({});
   };
 
@@ -384,7 +379,6 @@ class Prompt extends React.Component {
     var onComplete = this.props.onComplete;
 
     var promptId = prompt.PromptId;
-    var phaseId = user.CurrentPhaseId;
 
     var human = this.props.user.getScreenname()
       ? this.props.user.getScreenname()
@@ -452,7 +446,7 @@ class Input extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     if (this.triggerSubmit()) {
       this.handleSubmit();
     }
@@ -462,7 +456,7 @@ class Input extends React.Component {
     return this.state.enabled;
   }
 
-  handleChange = event => {
+  handleChange = () => {
     var user = this.props.user;
     var f = document.getElementById('dialogForm');
     var e = f.elements['dialoginput'];
@@ -508,7 +502,7 @@ class Input extends React.Component {
     var onComplete = this.props.onComplete;
     var e = document.getElementById('promptId');
     var promptId = e ? e.value : '';
-    var e = document.getElementById('phaseId');
+    e = document.getElementById('phaseId');
     var phaseId = e ? e.value : '';
     var f = document.getElementById('dialogForm');
     e = f.elements['dialoginput'];
@@ -546,18 +540,11 @@ class Input extends React.Component {
   };
 
   render() {
-    var app = this.props.app;
     var prompt = this.props.prompt;
-    var texts = prompt.Texts;
     var user = this.props.user;
-    var onComplete = this.props.onComplete;
 
     var promptId = prompt.PromptId;
     var phaseId = user.CurrentPhaseId;
-
-    var human = this.props.user.getScreenname()
-      ? this.props.user.getScreenname()
-      : this.props.user.getUsername();
 
     switch (prompt.PromptType) {
       case UI_PROMPT_ENTER_TO_CONTINUE:
@@ -606,9 +593,9 @@ class Input extends React.Component {
           console.error('Error: MC Prompt without options!');
           return <div></div>;
         }
-        var options = prompt.Options.map(function (option, i) {
-          return <PromptOption option={option} key={i} />;
-        });
+        var options = prompt.Options.map((option, i) => (
+          <PromptOption option={option} key={i} />
+        ));
 
         return (
           <div className="form">

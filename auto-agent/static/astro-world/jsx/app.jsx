@@ -23,11 +23,11 @@ export class App extends React.Component {
             if (!user.AllPerformanceRecords) {
               var performanceRecordsPromise = user.loadAllPerformanceRecords();
               performanceRecordsPromise.then(
-                function () {
+                () => {
                   self.state.actionReady = true;
                   self.setState(self.state);
                 },
-                function (error) {
+                error => {
                   console.error('Failed to all performance records!', error);
                 },
               );
@@ -49,7 +49,6 @@ export class App extends React.Component {
   };
 
   render() {
-    var state = this.state;
     var user = this.props.user;
     var actionReady = this.state.actionReady;
 

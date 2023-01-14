@@ -14,11 +14,8 @@ export class Action extends React.Component {
   };
 
   render() {
-    var state = this.state;
     var user = this.props.user;
     var app = this.props.app;
-    var prompt = user.getPrompt();
-    // debugger;
     switch (user.getCurrentPhaseId()) {
       case PHASE_COV:
         return (
@@ -60,7 +57,6 @@ export class MultiFactorsCausality extends React.Component {
     var user = this.props.user;
     var formName = this.props.formName;
 
-    var prompt = user.getPrompt();
     var form = document.getElementById(formName);
 
     var factorOrder = [];
@@ -81,7 +77,7 @@ export class MultiFactorsCausality extends React.Component {
     return selectedFactors;
   }
 
-  handleChange = event => {
+  handleChange = () => {
     this.setState({enabled: true});
   };
 
@@ -89,16 +85,13 @@ export class MultiFactorsCausality extends React.Component {
     event.preventDefault();
 
     var user = this.props.user;
-    var formName = this.props.formName;
 
-    var prompt = user.getPrompt();
     var onComplete = this.props.onComplete;
 
     var e = document.getElementById('promptId');
     var promptId = e ? e.value : '';
-    var e = document.getElementById('phaseId');
+    e = document.getElementById('phaseId');
     var phaseId = e ? e.value : '';
-    var f = document.getElementById(formName);
 
     var response = {};
     response.BeliefFactors = this.getSelectedFactors();
@@ -218,7 +211,6 @@ export class MultiFactorsCausalityLevels extends React.Component {
   getSelectedFactors() {
     var user = this.props.user;
     var formName = this.props.formName;
-    var prompt = user.getPrompt();
     var form = document.getElementById(formName);
 
     var factorOrder = [];
@@ -240,7 +232,7 @@ export class MultiFactorsCausalityLevels extends React.Component {
     return selectedFactors;
   }
 
-  handleChange = event => {
+  handleChange = () => {
     this.setState({enabled: true});
   };
 
@@ -248,15 +240,12 @@ export class MultiFactorsCausalityLevels extends React.Component {
     event.preventDefault();
 
     var user = this.props.user;
-    var formName = this.props.formName;
-    var prompt = user.getPrompt();
     var onComplete = this.props.onComplete;
 
     var e = document.getElementById('promptId');
     var promptId = e ? e.value : '';
-    var e = document.getElementById('phaseId');
+    e = document.getElementById('phaseId');
     var phaseId = e ? e.value : '';
-    var f = document.getElementById(formName);
 
     var response = {};
     response.BeliefFactors = this.getSelectedFactors();
@@ -278,18 +267,15 @@ export class MultiFactorsCausalityLevels extends React.Component {
     var tempfactors = Object.keys(user.getContentFactors()).map((fkey, i) => {
       var factor = user.getContentFactors()[fkey];
       if (factor.IsBeliefCausal) {
-        var factorId = factor.FactorId;
         factorOrder[i] = factor.Order;
 
-        var levels = factor.Levels.map((level, j) => {
-          return (
-            <MultiFactorsCausalityLevelSelection
-              factor={factor}
-              level={level}
-              key={j}
-            />
-          );
-        });
+        var levels = factor.Levels.map((level, j) => (
+          <MultiFactorsCausalityLevelSelection
+            factor={factor}
+            level={level}
+            key={j}
+          />
+        ));
 
         return (
           <tr key={i}>
@@ -349,7 +335,7 @@ export class MemoForm extends React.Component {
     return this.state.enabled;
   }
 
-  handleChange = event => {
+  handleChange = () => {
     var form = document.getElementById('actionForm');
     var memo = form.elements['memo'];
     var evidence = form.elements['evidence'];
@@ -382,7 +368,7 @@ export class MemoForm extends React.Component {
     var onComplete = this.props.onComplete;
     var e = document.getElementById('promptId');
     var promptId = e ? e.value : '';
-    var e = document.getElementById('phaseId');
+    e = document.getElementById('phaseId');
     var phaseId = e ? e.value : '';
     var form = document.getElementById('actionForm');
     var ask = form.elements['ask'];
@@ -401,9 +387,7 @@ export class MemoForm extends React.Component {
   };
 
   render() {
-    var state = this.state;
     var user = this.props.user;
-    var app = this.props.app;
     var prompt = user.getPrompt();
 
     var promptId = prompt.PromptId;
@@ -429,7 +413,7 @@ export class MemoForm extends React.Component {
               type="text"
               name="ask"
               size="20"
-              autofocus
+              autoFocus
               className="con"
               placeholder="Enter ask/do not ask"
             />{' '}
@@ -438,7 +422,7 @@ export class MemoForm extends React.Component {
               type="text"
               name="memo"
               size="50"
-              autofocus
+              autoFocus
               className="con"
               placeholder="Enter if it does/does not make a difference."
             />
@@ -469,16 +453,11 @@ export class MemoForm extends React.Component {
 
 export function Memo(props) {
   var user = props.user;
-  var app = props.app;
-  var prompt = user.getPrompt();
-  var targetFactorName, targetFactorId;
+  var targetFactorName;
   if (user.getState().TargetFactor) {
     targetFactorName = user.getState().TargetFactor.FactorName;
-    targetFactorId = user.getState().TargetFactor.FactorId;
   }
 
-  var promptId = prompt.PromptId;
-  var phaseId = user.getCurrentPhaseId();
   var ask, memo, evidence;
 
   if (user.getState().LastMemo) {

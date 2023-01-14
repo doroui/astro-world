@@ -12,7 +12,7 @@ export class SelectTargetFactor extends React.Component {
     return this.state.enabled;
   }
 
-  handleChange = event => {
+  handleChange = () => {
     this.setState({enabled: true});
   };
 
@@ -23,7 +23,7 @@ export class SelectTargetFactor extends React.Component {
     var onComplete = this.props.onComplete;
     var e = document.getElementById('promptId');
     var promptId = e ? e.value : '';
-    var e = document.getElementById('phaseId');
+    e = document.getElementById('phaseId');
     var phaseId = e ? e.value : '';
     var f = document.getElementById('covactionForm');
     e = f.elements['covactioninput'];
@@ -58,9 +58,9 @@ export class SelectTargetFactor extends React.Component {
       console.error('Error: Select factor UI without options!');
       return <div></div>;
     }
-    var options = prompt.Options.map(function (option, i) {
-      return <FactorPromptOption option={option} key={i} />;
-    });
+    var options = prompt.Options.map((option, i) => (
+      <FactorPromptOption option={option} key={i} />
+    ));
 
     return (
       <form
@@ -155,14 +155,10 @@ export class RecordSelection extends React.Component {
   // f.SelectedLevelId: the id of the level selected for the factor
   getSelectedFactors(record) {
     var user = this.props.user;
-    var prompt = user.getPrompt();
     var form = document.getElementById('covactionForm');
 
     var factorOrder = [];
-    var tempfactors = Object.keys(user.getContentFactors()).map(function (
-      fkey,
-      i,
-    ) {
+    var tempfactors = Object.keys(user.getContentFactors()).map((fkey, i) => {
       var factor = user.getContentFactors()[fkey];
       factorOrder[i] = factor.Order;
       var fid = form.elements[factor.FactorId + record];
@@ -181,14 +177,14 @@ export class RecordSelection extends React.Component {
     return selectedFactors;
   }
 
-  handleChange = event => {
+  handleChange = () => {
     var doubleRecord = this.props.doubleRecord;
     var comparePrevious = this.props.comparePrevious;
 
     var selectedFactors;
     if (!comparePrevious) {
       selectedFactors = this.getSelectedFactors('1');
-      for (var i = 0; i < selectedFactors.length; i++) {
+      for (let i = 0; i < selectedFactors.length; i++) {
         if (selectedFactors[i].SelectedLevelId == '') {
           return;
         }
@@ -196,7 +192,7 @@ export class RecordSelection extends React.Component {
     }
     if (doubleRecord) {
       selectedFactors = this.getSelectedFactors('2');
-      for (var i = 0; i < selectedFactors.length; i++) {
+      for (let i = 0; i < selectedFactors.length; i++) {
         if (selectedFactors[i].SelectedLevelId == '') {
           return;
         }
@@ -209,16 +205,14 @@ export class RecordSelection extends React.Component {
     event.preventDefault();
 
     var user = this.props.user;
-    var prompt = user.getPrompt();
     var onComplete = this.props.onComplete;
     var doubleRecord = this.props.doubleRecord;
     var comparePrevious = this.props.comparePrevious;
 
     var e = document.getElementById('promptId');
     var promptId = e ? e.value : '';
-    var e = document.getElementById('phaseId');
+    e = document.getElementById('phaseId');
     var phaseId = e ? e.value : '';
-    var f = document.getElementById('covactionForm');
 
     var response = {};
 
@@ -256,7 +250,6 @@ export class RecordSelection extends React.Component {
   };
 
   render() {
-    var state = this.state;
     var user = this.props.user;
     var app = this.props.app;
     var doubleRecord = this.props.doubleRecord;
@@ -271,23 +264,23 @@ export class RecordSelection extends React.Component {
     var factorOrder = [];
 
     if (!comparePrevious) {
-      var tempfactors = Object.keys(factors).map(function (fkey, i) {
+      let tempfactors = Object.keys(factors).map((fkey, i) => {
         var factor = factors[fkey];
         factorOrder[i] = factor.Order;
         return <FactorSelection factor={factor} key={i} record="1" />;
       });
       recordOneFactors = [];
-      for (var i = 0; i < tempfactors.length; i++) {
+      for (let i = 0; i < tempfactors.length; i++) {
         recordOneFactors[factorOrder[i]] = tempfactors[i];
       }
     }
-    var tempfactors = Object.keys(factors).map(function (fkey, i) {
+    let tempfactors = Object.keys(factors).map((fkey, i) => {
       var factor = factors[fkey];
       factorOrder[i] = factor.Order;
       return <FactorSelection factor={factor} key={i} record="2" />;
     });
     recordTwoFactors = [];
-    for (var i = 0; i < tempfactors.length; i++) {
+    for (let i = 0; i < tempfactors.length; i++) {
       recordTwoFactors[factorOrder[i]] = tempfactors[i];
     }
 
@@ -420,7 +413,7 @@ function FactorSelection(props) {
     factor.Levels[1] = '_';
   }
 
-  var levels = factor.Levels.map(function (level, i) {
+  var levels = factor.Levels.map((level, i) => {
     if (level == '_') {
       return <td key={i}>&nbsp;</td>;
     }
@@ -472,16 +465,11 @@ export class RecordPerformance extends React.Component {
   state = {mode: 0};
 
   render() {
-    var state = this.state;
     var user = this.props.user;
-    var app = this.props.app;
     var recordOneOnly = this.props.recordOneOnly;
     var recordTwoOnly = this.props.recordTwoOnly;
     var hidePerformance = this.props.hidePerformance;
 
-    var prompt = user.getPrompt();
-    var promptId = prompt.PromptId;
-    var phaseId = user.getCurrentPhaseId();
     var record1 =
       user.getState().RecordNoOne && user.getState().RecordNoOne.RecordNo
         ? user.getState().RecordNoOne
@@ -544,10 +532,7 @@ export class RecordPerformance extends React.Component {
 
     var recordDetails = function (r) {
       var factorOrder = [];
-      var tempfactors = Object.keys(user.getContentFactors()).map(function (
-        fkey,
-        i,
-      ) {
+      var tempfactors = Object.keys(user.getContentFactors()).map((fkey, i) => {
         var factor = user.getContentFactors()[fkey];
         factorOrder[i] = factor.Order;
         var fid = factor.FactorId;
@@ -559,7 +544,7 @@ export class RecordPerformance extends React.Component {
           factor.Levels[2] = factor.Levels[1];
           factor.Levels[1] = '_';
         }
-        var levels = factor.Levels.map(function (level, j) {
+        var levels = factor.Levels.map((level, j) => {
           if (level.ImgPath) {
             var imgPath = '/img/' + level.ImgPath;
             if (level.Text == SelectedLevelName) {

@@ -7,15 +7,14 @@ import {
   RecordSelection,
   CovMemoForm,
 } from './covactionmodes.js';
+import {Memo} from './action.js';
 
 export class CovAction extends React.Component {
   state = {mode: 0};
 
   render() {
-    var state = this.state;
     var user = this.props.user;
     var app = this.props.app;
-    var prompt = user.getPrompt();
     var action = user.getAction();
     var onComplete = this.props.onComplete;
 

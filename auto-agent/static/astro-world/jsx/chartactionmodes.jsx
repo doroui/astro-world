@@ -24,7 +24,6 @@ const noFilterTitle = 'All';
 // This must match what are passed through user.getAllPerformanceRecords()
 // Example format of key
 // fitness:average
-const noFilterKey = 'all'; // Key for all records
 
 // Example format of data
 // const data = [{
@@ -42,8 +41,7 @@ export function Chart(props) {
   var recordsToShow = props.recordsToShow;
 
   var xTitle = '';
-  var yLabels,
-    xLabels = [];
+  var xLabels = [];
   var performanceLabels = [
     {
       grade: 'A',
@@ -83,7 +81,7 @@ export function Chart(props) {
       for (var i = 0; i < fkey.length; i++) {
         if (factors[fkey[i]].FactorId == targetFactorId) {
           for (
-            var colIndex = 0;
+            let colIndex = 0;
             colIndex < factors[fkey[i]].Levels.length;
             colIndex++
           ) {
@@ -103,7 +101,7 @@ export function Chart(props) {
     xTitle = noFilterTitle;
   }
 
-  for (var colIndex = 0; colIndex < colFilters.length; colIndex++) {
+  for (let colIndex = 0; colIndex < colFilters.length; colIndex++) {
     data[colIndex] = {label: '', rcount: []};
     data[colIndex].label = xLabels[colIndex];
     for (var gindex = 0; gindex < pRecords.length; gindex++) {
@@ -193,7 +191,6 @@ function Diamonds(props) {
 }
 
 function Column(props) {
-  var totalHeight = props.rcount.length * rowHeight;
   var colWidth = columnWidth;
   var ePerRow = elementsPerRow;
   if (props.singleColumn) {
@@ -220,9 +217,7 @@ function Column(props) {
 }
 
 function Toolbox(props) {
-  var rcount = props.data[props.toolboxCol].rcount;
   var record = props.record;
-  var totalHeight = rcount.length * rowHeight;
   var colWidth = columnWidth;
   var ePerRow = elementsPerRow;
   if (props.singleColumn) {
@@ -237,7 +232,7 @@ function Toolbox(props) {
   var h = rectSize / 2;
 
   var factors = [];
-  Object.keys(record.FactorLevels).map(function (l, j) {
+  Object.keys(record.FactorLevels).map(l => {
     var i =
       Object.keys(record.FactorLevels).length -
       1 -
@@ -471,17 +466,15 @@ export class Graph extends React.Component {
       </g>
     ));
 
-    const rowBackground = props.data[0].rcount.map((_, i) => {
-      return (
-        <rect
-          width={props.data.length * colWidth}
-          height={rowHeight}
-          y={i * rowHeight}
-          fill={rowColors[i % rowColors.length]}
-          key={i}
-        />
-      );
-    });
+    const rowBackground = props.data[0].rcount.map((_, i) => (
+      <rect
+        width={props.data.length * colWidth}
+        height={rowHeight}
+        y={i * rowHeight}
+        fill={rowColors[i % rowColors.length]}
+        key={i}
+      />
+    ));
 
     var records;
     if (showToolbox) {
@@ -511,7 +504,7 @@ export class Graph extends React.Component {
       showToolbox = true;
       var allRecords = this.props.user.getAllPerformanceRecords();
       // This is when the properties of the Graph says to draw showing two records explicitly
-      records = props.recordsToShow.map(function (r, i) {
+      records = props.recordsToShow.map(r => {
         for (var j = 0; j < allRecords[r.grade].Records[r.filter].length; j++) {
           var record = allRecords[r.grade].Records[r.filter][j];
           if (r.no == record.RecordNo) {
@@ -588,7 +581,7 @@ export class ChartSelectTargetFactor extends React.Component {
     return this.state.enabled;
   }
 
-  handleChange = event => {
+  handleChange = () => {
     this.setState({enabled: true});
   };
 
@@ -599,7 +592,7 @@ export class ChartSelectTargetFactor extends React.Component {
     var onComplete = this.props.onComplete;
     var e = document.getElementById('promptId');
     var promptId = e ? e.value : '';
-    var e = document.getElementById('phaseId');
+    e = document.getElementById('phaseId');
     var phaseId = e ? e.value : '';
     var f = document.getElementById('chartactionForm');
     e = f.elements['chartactioninput'];
@@ -634,9 +627,9 @@ export class ChartSelectTargetFactor extends React.Component {
       console.error('Error: Select factor UI without options!');
       return <div></div>;
     }
-    var options = prompt.Options.map(function (option, i) {
-      return <ChartFactorPromptOption option={option} key={i} />;
-    });
+    var options = prompt.Options.map((option, i) => (
+      <ChartFactorPromptOption option={option} key={i} />
+    ));
 
     return (
       <form
@@ -907,6 +900,5 @@ export class ChartButtons extends React.Component {
         </div>
       );
     }
-    return null;
   }
 }

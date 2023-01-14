@@ -46,21 +46,18 @@ export class MultipleFactorsSelect extends React.Component {
     var user = this.props.user;
     var formName = this.props.formName;
 
-    var prompt = user.getPrompt();
     var form = document.getElementById(formName);
 
     var factorOrder = [];
     var tempfactorIdsMap;
 
     if (this.props.factors) {
-      tempfactorIdsMap = this.props.factors.map(function (v, i) {
-        return v.FactorId;
-      });
+      tempfactorIdsMap = this.props.factors.map(v => v.FactorId);
     } else {
       tempfactorIdsMap = Object.keys(user.getContentFactors());
     }
 
-    var tempfactors = tempfactorIdsMap.map(function (fkey, i) {
+    var tempfactors = tempfactorIdsMap.map((fkey, i) => {
       var factor = user.getContentFactors()[fkey];
       factorOrder[i] = factor.Order;
       var fid = form.elements[factor.FactorId];
@@ -79,7 +76,7 @@ export class MultipleFactorsSelect extends React.Component {
     return selectedFactors;
   }
 
-  handleChange = event => {
+  handleChange = () => {
     this.setState({enabled: true});
   };
 
@@ -87,16 +84,13 @@ export class MultipleFactorsSelect extends React.Component {
     event.preventDefault();
 
     var user = this.props.user;
-    var formName = this.props.formName;
 
-    var prompt = user.getPrompt();
     var onComplete = this.props.onComplete;
 
     var e = document.getElementById('promptId');
     var promptId = e ? e.value : '';
-    var e = document.getElementById('phaseId');
+    e = document.getElementById('phaseId');
     var phaseId = e ? e.value : '';
-    var f = document.getElementById(formName);
 
     var response = {};
     response.BeliefFactors = this.getSelectedFactors();
@@ -134,14 +128,12 @@ export class MultipleFactorsSelect extends React.Component {
     var tempfactorIdsMap;
 
     if (this.props.factors) {
-      tempfactorIdsMap = this.props.factors.map(function (v, i) {
-        return v.FactorId;
-      });
+      tempfactorIdsMap = this.props.factors.map(v => v.FactorId);
     } else {
       tempfactorIdsMap = Object.keys(user.getContentFactors());
     }
 
-    var tempfactors = tempfactorIdsMap.map(function (fkey, i) {
+    var tempfactors = tempfactorIdsMap.map((fkey, i) => {
       var factor = user.getContentFactors()[fkey];
       var factorId = factor.FactorId;
       factorOrder[i] = factor.Order;
@@ -206,7 +198,7 @@ export class SelectTeam extends React.Component {
     return this.state.enabled;
   }
 
-  handleChange = event => {
+  handleChange = () => {
     this.setState({enabled: true});
   };
 
@@ -226,10 +218,9 @@ export class SelectTeam extends React.Component {
     var user = this.props.user;
     var formName = 'predictionactionForm';
 
-    var prompt = user.getPrompt();
     var form = document.getElementById(formName);
 
-    var records = user.getState().AllPredictionRecords.map(function (v, i) {
+    var records = user.getState().AllPredictionRecords.map(v => {
       var r = form.elements[v.RecordName];
       if (r) {
         var f = {};
@@ -245,16 +236,13 @@ export class SelectTeam extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     var user = this.props.user;
-    var formName = 'predictionactionForm';
 
-    var prompt = user.getPrompt();
     var onComplete = this.props.onComplete;
 
     var e = document.getElementById('promptId');
     var promptId = e ? e.value : '';
-    var e = document.getElementById('phaseId');
+    e = document.getElementById('phaseId');
     var phaseId = e ? e.value : '';
-    var f = document.getElementById(formName);
 
     var response = {};
     response.Predictions = this.getSelectedRecords();
@@ -290,41 +278,22 @@ export class SelectTeam extends React.Component {
     var promptId = prompt.PromptId;
     var phaseId = user.getCurrentPhaseId();
 
-    var applicants = user
-      .getState()
-      .AllPredictionRecords.map(function (record, i) {
-        var recordOnClick = function () {
-          self.showRecord(record);
-        };
-        if (isSummary) {
-          var isSelectedRecord = record.IsSelected ? (
-            <label>
-              <input type="checkbox" checked />
-            </label>
-          ) : (
-            <label>&nbsp;</label>
-          );
-          return (
-            <tr key={i}>
-              <td>
-                <label>{isSelectedRecord}</label>
-              </td>
-              <td className="factorNameFront"># {record.RecordNo}</td>
-              <td className="factorNameFront">
-                <button type="button" onClick={recordOnClick}>
-                  {record.RecordName}
-                </button>
-              </td>
-              <td className="factorNameFront">{record.PredictedPerformance}</td>
-            </tr>
-          );
-        }
+    var applicants = user.getState().AllPredictionRecords.map((record, i) => {
+      var recordOnClick = function () {
+        self.showRecord(record);
+      };
+      if (isSummary) {
+        var isSelectedRecord = record.IsSelected ? (
+          <label>
+            <input type="checkbox" checked />
+          </label>
+        ) : (
+          <label>&nbsp;</label>
+        );
         return (
           <tr key={i}>
             <td>
-              <label>
-                <input type="checkbox" name={record.RecordName} />
-              </label>
+              <label>{isSelectedRecord}</label>
             </td>
             <td className="factorNameFront"># {record.RecordNo}</td>
             <td className="factorNameFront">
@@ -335,7 +304,24 @@ export class SelectTeam extends React.Component {
             <td className="factorNameFront">{record.PredictedPerformance}</td>
           </tr>
         );
-      });
+      }
+      return (
+        <tr key={i}>
+          <td>
+            <label>
+              <input type="checkbox" name={record.RecordName} />
+            </label>
+          </td>
+          <td className="factorNameFront"># {record.RecordNo}</td>
+          <td className="factorNameFront">
+            <button type="button" onClick={recordOnClick}>
+              {record.RecordName}
+            </button>
+          </td>
+          <td className="factorNameFront">{record.PredictedPerformance}</td>
+        </tr>
+      );
+    });
 
     var recordDetails = self.state.showRecord ? (
       <div className="no-border-frame">
@@ -381,7 +367,7 @@ export class SelectTeam extends React.Component {
                   <tr>
                     <td>&nbsp;</td>
                     <td className="factorNameFront">Record Number</td>
-                    <td className="factorNameFront">Applicant's Name</td>
+                    <td className="factorNameFront">Applicant&apos;s Name</td>
                     <td className="factorNameFront">
                       Performance You Predicted
                     </td>
@@ -407,30 +393,25 @@ export class PredictionRecord extends React.Component {
   state = {mode: 0};
 
   render() {
-    var state = this.state;
     var user = this.props.user;
-    var app = this.props.app;
     var record = this.props.record;
     var showPerformancePrediction = this.props.showPerformancePrediction;
     var predictionHistory = this.props.predictionHistory;
 
-    var prompt = user.getPrompt();
-    var promptId = prompt.PromptId;
-    var phaseId = user.getCurrentPhaseId();
     record = record ? record : user.getState().TargetPrediction;
 
     var recordDetails = function (r) {
       var performancePrediction = function (rr) {
         return showPerformancePrediction ? (
           <p className="predicted-performance-level">
-            You predicted {rr.RecordName}'s performance to be:
+            You predicted {rr.RecordName}&apos;s performance to be:
             <span className="grade">{rr.PredictedPerformance}</span>
           </p>
         ) : null;
       };
 
       var factorOrder = [];
-      var tempfactors = user.getState().DisplayFactors.map(function (v, i) {
+      var tempfactors = user.getState().DisplayFactors.map((v, i) => {
         var factor = v;
         factorOrder[i] = factor.Order;
         var fid = factor.FactorId;
@@ -442,7 +423,7 @@ export class PredictionRecord extends React.Component {
           factor.Levels[2] = factor.Levels[1];
           factor.Levels[1] = '_';
         }
-        var levels = factor.Levels.map(function (level, j) {
+        var levels = factor.Levels.map((level, j) => {
           if (level.ImgPath) {
             var imgPath = '/img/' + level.ImgPath;
             if (level.Text == SelectedLevelName) {
@@ -503,7 +484,7 @@ export class PredictionRecord extends React.Component {
     var hasHistory = false;
     var allPreviousRecordsDetails = user
       .getState()
-      .AllPredictionRecords.map(function (v, i) {
+      .AllPredictionRecords.map(v => {
         if (v.RecordNo < record.RecordNo) {
           hasHistory = true;
           return recordDetails(v);
@@ -511,14 +492,10 @@ export class PredictionRecord extends React.Component {
         return null;
       });
     // Show previous records in reverse order
-    var reversePreviousRecordsDetails = allPreviousRecordsDetails.map(function (
-      v,
-      i,
-    ) {
-      return allPreviousRecordsDetails[
-        allPreviousRecordsDetails.length - i - 1
-      ];
-    });
+    var reversePreviousRecordsDetails = allPreviousRecordsDetails.map(
+      (v, i) =>
+        allPreviousRecordsDetails[allPreviousRecordsDetails.length - i - 1],
+    );
     var title = hasHistory ? (
       <h3 className="recordHeading">Your Prediction History</h3>
     ) : null;
