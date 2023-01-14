@@ -1,7 +1,2 @@
-react.js
-react.min.js
-react-dom.js
-react-dom.min.js
-promise-1.0.0.min.js
-promise-1.0.0.js
-JSXTransformer.js
+static/astro-world/react-js/
+static/astro-world/js/

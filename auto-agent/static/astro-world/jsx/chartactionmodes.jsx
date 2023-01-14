@@ -1,5 +1,9 @@
 import {React} from './deps.js';
-import {MultiFactorsCausality, MultiFactorsCausalityLevels} from './action.js';
+import {
+  MultiFactorsCausality,
+  MultiFactorsCausalityLevels,
+  MemoForm,
+} from './action.js';
 
 const rectSize = 8;
 const toolBoxSizeHeight = 200;

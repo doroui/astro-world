@@ -1,4 +1,4 @@
-import {React, ReactDOM} from './deps.js';
+import {React} from './deps.js';
 import {
   DELAY_PROMPT_TIME_LONG,
   DELAY_PROMPT_TIME_SHORT,
@@ -10,6 +10,7 @@ import {
   UI_PROMPT_MC,
   UI_PROMPT_STRAIGHT_THROUGH,
   UI_PROMPT_TEXT,
+  DELAY_PROMPT_TIME_REALLY_SHORT,
 } from './user.js';
 
 var MSG_ROBOT = 'robot';
@@ -477,7 +478,7 @@ class Input extends React.Component {
     }
   };
 
-  handleEnter(event) {
+  handleEnter = event => {
     if (this.state.enabled) {
       if (!event.shiftKey) {
         if (event.which == 13) {
@@ -486,7 +487,7 @@ class Input extends React.Component {
         }
       }
     }
-  }
+  };
 
   triggerSubmit() {
     if (this.props.prompt.PromptType == UI_PROMPT_STRAIGHT_THROUGH) {

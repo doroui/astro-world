@@ -1,4 +1,4 @@
-import {ReactDOM} from './deps.js';
+import {React, ReactDOM} from './deps.js';
 
 // npm install -g react-tools
 // jsx -w -x jsx public/js public/js
@@ -31,7 +31,7 @@ function main() {
     // React.renderComponent(<App variableModels={variableModels} user={user}/>,
     //                   document.body);
 
-    user.loadAllUserData(function () {
+    user.loadAllUserData(() => {
       ReactDOM.render(<App user={user} />, document.getElementById('main'));
     });
   }

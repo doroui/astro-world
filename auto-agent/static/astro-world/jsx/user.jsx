@@ -25,68 +25,56 @@ export const LAST_PHASE = 'END';
 
 export const UIACTION_INACTIVE = 'NO_UIACTION';
 
-export function User(name) {
-  this.Username = name;
-  this.Screenname = '';
-  this.History = [];
-  this.CurrentPhaseId = '';
-  this.CurrentUIPrompt = {};
-  this.CurrentUIAction = {};
-  this.State = {};
-  this.ArchiveHistoryLength = 0;
-  // this.AllPerformanceRecords = {};
-}
-
-User.prototype = {
-  loadAllUserData: function (renderCallback) {
+export class User {
+  constructor(name) {
+    this.Username = name;
+    this.Screenname = '';
+    this.History = [];
+    this.CurrentPhaseId = '';
+    this.CurrentUIPrompt = {};
+    this.CurrentUIAction = {};
+    this.State = {};
+    this.ArchiveHistoryLength = 0;
+    // this.AllPerformanceRecords = {};
+  }
+  loadAllUserData(renderCallback) {
     var historyPromise = this.loadHistory();
 
-    historyPromise.then(renderCallback, function (error) {
+    historyPromise.then(renderCallback, error => {
       console.error('Failed to load history!', error);
     });
-  },
-
-  getUsername: function () {
+  }
+  getUsername() {
     return this.Username;
-  },
-
-  getHistory: function () {
+  }
+  getHistory() {
     return this.History;
-  },
-
-  getCurrentPhaseId: function () {
+  }
+  getCurrentPhaseId() {
     return this.CurrentPhaseId;
-  },
-
-  getPrompt: function () {
+  }
+  getPrompt() {
     return this.CurrentUIPrompt;
-  },
-
-  getAction: function () {
+  }
+  getAction() {
     return this.CurrentUIAction;
-  },
-
-  getContentFactors: function () {
+  }
+  getContentFactors() {
     return this.State.ContentFactors;
-  },
-
-  getScreenname: function () {
+  }
+  getScreenname() {
     return this.Screenname;
-  },
-
-  getState: function () {
+  }
+  getState() {
     return this.State;
-  },
-
-  getArchiveHistoryLength: function () {
+  }
+  getArchiveHistoryLength() {
     return this.ArchiveHistoryLength;
-  },
-
-  getAllPerformanceRecords: function () {
+  }
+  getAllPerformanceRecords() {
     return this.AllPerformanceRecords;
-  },
-
-  updateUser: function (j) {
+  }
+  updateUser(j) {
     this.Screenname = j.Screenname;
     this.History = j.History;
     this.CurrentUIPrompt = j.CurrentUIPrompt;
@@ -94,15 +82,13 @@ User.prototype = {
     this.CurrentPhaseId = j.CurrentPhaseId;
     this.State = j.State;
     this.ArchiveHistoryLength = j.ArchiveHistoryLength;
-  },
-
-  updateAllPerformanceRecords: function (j) {
+  }
+  updateAllPerformanceRecords(j) {
     this.AllPerformanceRecords = j;
-  },
-
-  loadHistory: function () {
+  }
+  loadHistory() {
     var self = this;
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise((resolve, reject) => {
       var historyReq = new XMLHttpRequest();
       historyReq.onload = function () {
         self.updateUser(JSON.parse(historyReq.responseText));
@@ -116,11 +102,10 @@ User.prototype = {
     });
 
     return promise;
-  },
-
-  loadAllPerformanceRecords: function () {
+  }
+  loadAllPerformanceRecords() {
     var self = this;
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise((resolve, reject) => {
       var recordsReq = new XMLHttpRequest();
       recordsReq.onload = function () {
         self.updateAllPerformanceRecords(JSON.parse(recordsReq.responseText));
@@ -134,11 +119,10 @@ User.prototype = {
     });
 
     return promise;
-  },
-
+  }
   //After submitting the response
   //Update user with new history etc.
-  submitResponse: function (promptId, phaseId, jsonResponse, renderCallback) {
+  submitResponse(_promptId, _phaseId, jsonResponse, renderCallback) {
     var self = this;
     // var text = value;
     var question = this.CurrentUIPrompt.Texts;
@@ -154,7 +138,7 @@ User.prototype = {
     formData.append('phaseId', phaseId);
     formData.append('jsonResponse', jsonResponse);
 
-    var responsePromise = new Promise(function (resolve, reject) {
+    var responsePromise = new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
       xhr.onload = function () {
         self.updateUser(JSON.parse(xhr.responseText));
@@ -167,8 +151,8 @@ User.prototype = {
       xhr.send(formData);
     });
 
-    responsePromise.then(renderCallback, function (error) {
+    responsePromise.then(renderCallback, error => {
       console.error('Failed to submit a response!', error);
     });
-  },
-};
+  }
+}

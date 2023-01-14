@@ -1,5 +1,9 @@
 import {React} from './deps.js';
-import {MultiFactorsCausality, MultiFactorsCausalityLevels} from './action.js';
+import {
+  MultiFactorsCausality,
+  MultiFactorsCausalityLevels,
+  MemoForm,
+} from './action.js';
 
 export class SelectTargetFactor extends React.Component {
   state = {enabled: false};
@@ -627,7 +631,7 @@ export class RecordPerformance extends React.Component {
   }
 }
 
-function CovMemoForm(props) {
+export function CovMemoForm(props) {
   var targetFactorName;
   if (props.user.getState().TargetFactor) {
     targetFactorName = props.user.getState().TargetFactor.FactorName;

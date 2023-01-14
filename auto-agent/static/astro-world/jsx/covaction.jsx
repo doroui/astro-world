@@ -1,11 +1,11 @@
 import {React} from './deps.js';
-
 import {
   SelectTargetFactor,
   PriorBeliefFactors,
   PriorBeliefLevels,
   RecordPerformance,
   RecordSelection,
+  CovMemoForm,
 } from './covactionmodes.js';
 
 export class CovAction extends React.Component {

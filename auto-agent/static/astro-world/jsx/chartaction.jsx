@@ -1,6 +1,13 @@
 import {React} from './deps.js';
+import {
+  ChartSelectTargetFactor,
+  Chart,
+  ChartMemoForm,
+  FactorsSummaryForm,
+  FactorsLevelsSummaryForm,
+} from './chartactionmodes.js';
+import {Memo} from './action.js';
 
-import {ChartSelectTargetFactor} from './chartactionmodes.js';
 export class ChartAction extends React.Component {
   state = {mode: 0};
 

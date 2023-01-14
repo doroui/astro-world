@@ -1,6 +1,8 @@
 import {React} from './deps.js';
 import {PHASE_COV, PHASE_CHART, PHASE_PREDICTION} from './user.js';
 import {CovAction} from './covaction.js';
+import {ChartAction} from './chartaction.js';
+import {PredictionAction} from './predictionaction.js';
 
 export class Action extends React.Component {
   state = {mode: 0};
@@ -62,10 +64,7 @@ export class MultiFactorsCausality extends React.Component {
     var form = document.getElementById(formName);
 
     var factorOrder = [];
-    var tempfactors = Object.keys(user.getContentFactors()).map(function (
-      fkey,
-      i,
-    ) {
+    var tempfactors = Object.keys(user.getContentFactors()).map((fkey, i) => {
       var factor = user.getContentFactors()[fkey];
       factorOrder[i] = factor.Order;
       var fid = form.elements[factor.FactorId];
@@ -119,10 +118,7 @@ export class MultiFactorsCausality extends React.Component {
     var phaseId = user.getCurrentPhaseId();
 
     var factorOrder = [];
-    var tempfactors = Object.keys(user.getContentFactors()).map(function (
-      fkey,
-      i,
-    ) {
+    var tempfactors = Object.keys(user.getContentFactors()).map((fkey, i) => {
       var factor = user.getContentFactors()[fkey];
       var factorId = factor.FactorId;
       factorOrder[i] = factor.Order;
@@ -226,10 +222,7 @@ export class MultiFactorsCausalityLevels extends React.Component {
     var form = document.getElementById(formName);
 
     var factorOrder = [];
-    var tempfactors = Object.keys(user.getContentFactors()).map(function (
-      fkey,
-      i,
-    ) {
+    var tempfactors = Object.keys(user.getContentFactors()).map((fkey, i) => {
       var factor = user.getContentFactors()[fkey];
       factorOrder[i] = factor.Order;
       var fid = form.elements[factor.FactorId];
@@ -282,16 +275,13 @@ export class MultiFactorsCausalityLevels extends React.Component {
     var phaseId = user.getCurrentPhaseId();
 
     var factorOrder = [];
-    var tempfactors = Object.keys(user.getContentFactors()).map(function (
-      fkey,
-      i,
-    ) {
+    var tempfactors = Object.keys(user.getContentFactors()).map((fkey, i) => {
       var factor = user.getContentFactors()[fkey];
       if (factor.IsBeliefCausal) {
         var factorId = factor.FactorId;
         factorOrder[i] = factor.Order;
 
-        var levels = factor.Levels.map(function (level, j) {
+        var levels = factor.Levels.map((level, j) => {
           return (
             <MultiFactorsCausalityLevelSelection
               factor={factor}
@@ -369,14 +359,14 @@ export class MemoForm extends React.Component {
     return;
   };
 
-  handleEnter(event) {
+  handleEnter = event => {
     if (!event.shiftKey) {
       if (event.which == 13) {
         // "Enter" key was pressed.
         this.handleSubmit(event);
       }
     }
-  }
+  };
 
   handleSubmit = event => {
     if (event) {
@@ -477,7 +467,7 @@ export class MemoForm extends React.Component {
   }
 }
 
-function Memo(props) {
+export function Memo(props) {
   var user = props.user;
   var app = props.app;
   var prompt = user.getPrompt();

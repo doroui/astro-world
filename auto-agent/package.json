@@ -4,8 +4,7 @@
   "description": "### Go",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint static/",
+    "lint": "eslint static/ --ext jsx,js",
     "build": "esbuild static/astro-world/jsx/* --outdir=static/astro-world/js",
     "build:watch": "esbuild static/astro-world/jsx/* --outdir=static/astro-world/js --watch",
     "format": "prettier --write static/astro-world/*"

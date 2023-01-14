@@ -1,4 +1,14 @@
-function PredictionAction(props) {
+import {React} from './deps.js';
+import {Chart} from './chartactionmodes.js';
+import {
+  FactorsRequestForm,
+  PredictionRecord,
+  ContributingFactorsForm,
+  SelectTeam,
+} from './predictionactionmodes.js';
+import {ChartButtons} from './chartactionmodes.js';
+
+export function PredictionAction(props) {
   var user = props.user;
   var app = props.app;
   var prompt = user.getPrompt();
