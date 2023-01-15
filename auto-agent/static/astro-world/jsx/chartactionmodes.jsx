@@ -584,7 +584,7 @@ export class ChartSelectTargetFactor extends React.Component {
     this.setState({enabled: true});
   };
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault(); // default might be to follow a link, instead, takes control over the event
 
     var user = this.props.user;
@@ -613,7 +613,7 @@ export class ChartSelectTargetFactor extends React.Component {
     response.id = id;
     var jsonResponse = JSON.stringify(response);
     user.submitResponse(promptId, phaseId, jsonResponse, onComplete);
-  }
+  };
 
   render() {
     var user = this.props.user;

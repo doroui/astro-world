@@ -208,11 +208,11 @@ export class SelectTeam extends React.Component {
     this.setState(this.state);
   }
 
-  hideRecord() {
+  hideRecord = () => {
     this.state.showRecord = false;
     this.state.record = null;
     this.setState(this.state);
-  }
+  };
 
   getSelectedRecords() {
     var user = this.props.user;
