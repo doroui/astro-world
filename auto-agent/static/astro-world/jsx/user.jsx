@@ -118,6 +118,40 @@ export class User {
 
     return promise;
   }
+
+  gotoPhase(gotoPhaseId, jsonResponse, renderCallback) {
+    var question = this.CurrentUIPrompt.Texts;
+    var jsonQuestion = JSON.stringify(question); // Turns the texts array into json
+    var phaseId = this.CurrentPhaseId;
+    var promptId = this.CurrentUIPrompt.PromptId;
+
+    var formData = new FormData();
+
+    formData.append('user', this.Username);
+    formData.append('questionText', jsonQuestion);
+    formData.append('promptId', promptId);
+    formData.append('phaseId', phaseId);
+    formData.append('jsonResponse', jsonResponse);
+    formData.append('gotophase', gotoPhaseId);
+
+    var responsePromise = new Promise((resolve, reject) => {
+      var xhr = new XMLHttpRequest();
+      xhr.onload = () => {
+        this.updateUser(JSON.parse(xhr.responseText));
+        resolve();
+      };
+      xhr.error = () => {
+        reject();
+      };
+      xhr.open('POST', 'sendresponse');
+      xhr.send(formData);
+    });
+
+    responsePromise.then(renderCallback, error => {
+      console.error('Failed to submit a response!', error);
+    });
+  }
+
   //After submitting the response
   //Update user with new history etc.
   submitResponse(_promptId, _phaseId, jsonResponse, renderCallback) {
