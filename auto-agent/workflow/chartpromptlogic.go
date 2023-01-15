@@ -1,16 +1,16 @@
 package workflow
 
 import (
-	"db"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"strings"
-
-	"appengine"
 	"time"
+
+	"github.com/toisin/astro-world/auto-agent/db"
 )
 
 // Prompt logics specific to Chart phase
@@ -28,7 +28,7 @@ func MakeChartPrompt(p PromptConfig, uiUserData *UIUserData) *ChartPrompt {
 	return n
 }
 
-func (cp *ChartPrompt) ProcessResponse(r string, u *db.User, uiUserData *UIUserData, c appengine.Context) {
+func (cp *ChartPrompt) ProcessResponse(r string, u *db.User, uiUserData *UIUserData, c context.Context) {
 	if cp.promptConfig.ResponseType == RESPONSE_END {
 		cp.nextPrompt = cp.generateFirstPromptInNextSequence(uiUserData)
 	} else if r != "" {
@@ -177,11 +177,11 @@ func (cp *ChartPrompt) updateFirstWrongSummaryFactor(uiUserData *UIUserData) {
 	}
 }
 
-func (cp *ChartPrompt) checkRecord(rsr *UIChartRecordSelectResponse, c appengine.Context) {
+func (cp *ChartPrompt) checkRecord(rsr *UIChartRecordSelectResponse, c context.Context) {
 	if rsr.RecordNo != 0 {
 		record, _, err := db.GetRecordByRecordNo(c, rsr.RecordNo)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "DB Error Getting A Record with Record #:%s , %s!\n\n", rsr.RecordNo, err.Error())
+			fmt.Fprintf(os.Stderr, "DB Error Getting A Record with Record #:%d , %s!\n\n", rsr.RecordNo, err.Error())
 			log.Fatal(err)
 			return
 		}

@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	util ".."
+	"github.com/toisin/astro-world/util"
 )
 
 const promptIDIdx = 2

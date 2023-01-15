@@ -8,7 +8,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/toisin/astro-world/auto-agent/util"
+	"github.com/toisin/astro-world/util"
 )
 
 const usernameIdx = 0

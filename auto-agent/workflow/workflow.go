@@ -11,8 +11,7 @@ import (
 	"os"
 	"strconv"
 
-	"db"
-	// "strings"
+	"github.com/toisin/astro-world/auto-agent/db"
 )
 
 const (
@@ -72,7 +71,7 @@ const (
 	// 1. id must be unique and are treated as case insensitive.
 	// 2. reference to an already defined prompt by specifying the id only, otherwise, the last definition is used
 	// 3. if there is only one expected response, ExpectedResponses, it becomes the default next prompt
-	promptTreeJsonFile = "workflow.json"
+	promptTreeJsonFile = "auto-agent/workflow.json"
 )
 
 type AppConfig struct {
@@ -221,7 +220,7 @@ func WriteWorkflowText(w http.ResponseWriter) {
 		log.Fatal("Cannot write file", err)
 	}
 
-	for i, _ := range covPhaseConfig.OrderedSequences {
+	for i := range covPhaseConfig.OrderedSequences {
 		writePromptInText("", covPhaseConfig.OrderedSequences[i].FirstPrompt, writer, 0, ExpectedResponseValue{})
 	}
 
@@ -230,7 +229,7 @@ func WriteWorkflowText(w http.ResponseWriter) {
 		log.Fatal("Cannot write file", err)
 	}
 
-	for i, _ := range chartPhaseConfig.OrderedSequences {
+	for i := range chartPhaseConfig.OrderedSequences {
 		writePromptInText("", chartPhaseConfig.OrderedSequences[i].FirstPrompt, writer, 0, ExpectedResponseValue{})
 	}
 
@@ -239,7 +238,7 @@ func WriteWorkflowText(w http.ResponseWriter) {
 		log.Fatal("Cannot write file", err)
 	}
 
-	for i, _ := range predictionPhaseConfig.OrderedSequences {
+	for i := range predictionPhaseConfig.OrderedSequences {
 		writePromptInText("", predictionPhaseConfig.OrderedSequences[i].FirstPrompt, writer, 0, ExpectedResponseValue{})
 	}
 
@@ -294,15 +293,15 @@ func InitWorkflow() {
 		chartPhaseConfig := appConfig.ChartPhase
 		predictionPhaseConfig := appConfig.PredictionPhase
 		populateSupportPromptConfigMap(covPhaseConfig.SupportPrompts, covPhaseConfig.Id)
-		for i, _ := range covPhaseConfig.OrderedSequences {
+		for i := range covPhaseConfig.OrderedSequences {
 			populatePromptConfigMap(&covPhaseConfig.OrderedSequences[i].FirstPrompt, covPhaseConfig.Id, i)
 		}
 		populateSupportPromptConfigMap(chartPhaseConfig.SupportPrompts, chartPhaseConfig.Id)
-		for i, _ := range chartPhaseConfig.OrderedSequences {
+		for i := range chartPhaseConfig.OrderedSequences {
 			populatePromptConfigMap(&chartPhaseConfig.OrderedSequences[i].FirstPrompt, chartPhaseConfig.Id, i)
 		}
 		populateSupportPromptConfigMap(predictionPhaseConfig.SupportPrompts, predictionPhaseConfig.Id)
-		for i, _ := range predictionPhaseConfig.OrderedSequences {
+		for i := range predictionPhaseConfig.OrderedSequences {
 			populatePromptConfigMap(&predictionPhaseConfig.OrderedSequences[i].FirstPrompt, predictionPhaseConfig.Id, i)
 		}
 

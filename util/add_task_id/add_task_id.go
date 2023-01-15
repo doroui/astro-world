@@ -6,7 +6,7 @@ import (
 	"os"
 	"regexp"
 
-	util ".."
+	"github.com/toisin/astro-world/util"
 )
 
 const (

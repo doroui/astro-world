@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,10 +13,8 @@ import (
 	"text/template"
 	"time"
 
-	"db"
-	"util"
-
-	"appengine"
+	"github.com/toisin/astro-world/auto-agent/db"
+	"github.com/toisin/astro-world/auto-agent/util"
 )
 
 type Prompt interface {
@@ -27,7 +26,7 @@ type Prompt interface {
 	GetPromptId() string
 	GetUIPrompt() UIPrompt
 	GetUIAction() UIAction
-	ProcessResponse(string, *db.User, *UIUserData, appengine.Context)
+	ProcessResponse(string, *db.User, *UIUserData, context.Context)
 	initUIPromptDynamicText(*UIUserData, Response)
 	initDynamicResponseUIPrompt(*UIUserData)
 	initUIPrompt(*UIUserData)
@@ -180,7 +179,9 @@ func (cp *GenericPrompt) initUIPrompt(uiUserData *UIUserData) {
 // Expects DynamicOptionsTemplateRef attribute to be set in workflow.json
 // .Ids & .Texts each is a template string that are expected to resolve to a string array
 // e.g. The template string may resolve to: ["education", "fitness"] which is
-//      in a json format of a string array
+//
+//	in a json format of a string array
+//
 // If the template string contain no template code, as long as the format complies,
 // it is still a valid value for .Ids & .Texts
 func (cp *GenericPrompt) initDynamicResponseUIPrompt(uiUserData *UIUserData) {
@@ -236,7 +237,7 @@ func (cp *GenericPrompt) initUIPromptDynamicText(uiUserData *UIUserData, r Respo
 	cp.currentUIPrompt.setText(p.String())
 }
 
-func (cp *GenericPrompt) processSimpleResponse(r string, u *db.User, uiUserData *UIUserData, c appengine.Context) {
+func (cp *GenericPrompt) processSimpleResponse(r string, u *db.User, uiUserData *UIUserData, c context.Context) {
 	if r != "" {
 		dec := json.NewDecoder(strings.NewReader(r))
 		for {

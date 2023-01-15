@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	util ".."
+	"github.com/toisin/astro-world/util"
 )
 
 func main() {

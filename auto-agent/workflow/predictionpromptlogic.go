@@ -1,7 +1,7 @@
 package workflow
 
 import (
-	"db"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"appengine"
+	"github.com/toisin/astro-world/auto-agent/db"
 )
 
 // Prompt logics specific to Prediction phase
@@ -28,7 +28,7 @@ func MakePredictionPrompt(p PromptConfig, uiUserData *UIUserData) *PredictionPro
 	return n
 }
 
-func (cp *PredictionPrompt) ProcessResponse(r string, u *db.User, uiUserData *UIUserData, c appengine.Context) {
+func (cp *PredictionPrompt) ProcessResponse(r string, u *db.User, uiUserData *UIUserData, c context.Context) {
 	if cp.promptConfig.ResponseType == RESPONSE_END {
 		// TODO - how to handle final phase
 		cp.nextPrompt = cp.generateFirstPromptInNextSequence(uiUserData)

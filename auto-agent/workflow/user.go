@@ -1,9 +1,10 @@
 package workflow
 
 import (
-	"db"
 	"fmt"
 	"os"
+
+	"github.com/toisin/astro-world/auto-agent/db"
 )
 
 type UserData struct {

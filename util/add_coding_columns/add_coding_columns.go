@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	util ".."
+	"github.com/toisin/astro-world/util"
 )
 
 var (

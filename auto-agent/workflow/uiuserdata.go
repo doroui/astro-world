@@ -1,10 +1,11 @@
 package workflow
 
 import (
-	"db"
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/toisin/astro-world/auto-agent/db"
 )
 
 // Includes only the variables that are needed on the client side
@@ -463,8 +464,9 @@ func (fs FactorState) String() string {
 // configured for the particular phase
 // in the workflow.json
 // (Used by UIUserData.ContentFactors &
-//  Partially used by GenericState.ReaminingFactors -- only Text & FactorId are initialized,
-//  Partially used by UIMultiFactorsResponse -- only IsBeliefCausal, BestLevelId & FactorId are initialized,)
+//
+//	Partially used by GenericState.ReaminingFactors -- only Text & FactorId are initialized,
+//	Partially used by UIMultiFactorsResponse -- only IsBeliefCausal, BestLevelId & FactorId are initialized,)
 type UIFactor struct {
 	FactorId       string
 	Text           string
@@ -708,7 +710,7 @@ func GetAllPerformanceRecords(records []db.Record) []Performance {
 			pd[i].Grade = appConfig.Content.OutcomeVariable.Levels[i].Name
 			pd[i].Records = make(map[string][]RecordState)
 		}
-		for k, _ := range pd[i].Records {
+		for k := range pd[i].Records {
 			pd[i].Records[k] = pd[i].Records[k][0:counts[i][k]]
 		}
 	}

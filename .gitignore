@@ -1,14 +1,14 @@
 *.pid
 *.DS_Store
 
-/auto-agent/static/astro-world/js/*
-/auto-agent/static/astro-world/js/.*
-/auto-agent/static/astro-world/js/*.*
+auto-agent/static/astro-world/js/*
+auto-agent/static/astro-world/js/.*
+auto-agent/static/astro-world/js/*.*
 
-/exploration/data/*
-/exploration/data/.*
-/exploration/data/*.*
+exploration/data/*
+exploration/data/.*
+exploration/data/*.*
 
-/exploration/public/js/*
-/exploration/public/js/.*
-/exploration/public/js/*.*
+exploration/public/js/*
+exploration/public/js/.*
+exploration/public/js/*.*

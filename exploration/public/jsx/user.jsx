@@ -1,75 +1,61 @@
-/** @jsx React.DOM */
-
-// npm install -g react-tools
-// jsx -w -x jsx public/js public/js
-
-function User(name) {
-  this.username = username;
-  this.oldCart = null;
-  this.newCart = null;
-  this.results = null;
-  this.currentChallenge = null;
-}
-
-User.prototype = {
-
-  loadAllUserData: function(renderCallback) {
-    var self = this;
-
+export class User {
+  constructor(name) {
+    this.username = username;
+    this.oldCart = null;
+    this.newCart = null;
+    this.results = null;
+    this.currentChallenge = null;
+  }
+  loadAllUserData(renderCallback) {
     //var challengePromise = self.loadUserChallengeData();
-
     // var cartPromise = challengePromise.then(function() {
     //   self.loadUserResultData();
     // });
-    var cartPromise = self.loadUserResultData();
-    cartPromise.then(renderCallback, function(error) {
-                                            console.error("Failed!", error);
-                                          });
-  },
-
+    var cartPromise = this.loadUserResultData();
+    cartPromise.then(renderCallback, error => {
+      console.error('Failed!', error);
+    });
+  }
   // passing in self because otherwise, the scope can be screwed up if
   //     this is called from Promise
-  loadUserChallengeData: function() {
-    var self = this;
-    var promise = new Promise(function(resolve, reject) {
+  loadUserChallengeData() {
+    var promise = new Promise((resolve, reject) => {
       var challengeReq = new XMLHttpRequest();
-      challengeReq.onload = function() {
+      challengeReq.onload = () => {
         //self.results = JSON.parse(challengeReq.responseText);
-        resolve(self);
+        resolve(this);
       };
-      challengeReq.onerror = function() {
-        reject(Error("It broke"));
+      challengeReq.onerror = () => {
+        reject(Error('It broke'));
       };
-      challengeReq.open('GET', '/userchallenge/' + self.username + '/findallchallenges');
+      challengeReq.open(
+        'GET',
+        '/userchallenge/' + this.username + '/findallchallenges',
+      );
       challengeReq.send(null);
-
     });
 
     return promise;
-  },
-
+  }
   // passing in self because otherwise, the scope can be screwed up if
   //     this is called from Promise
-  loadUserResultData: function() {
-    var self = this;
-    var promise = new Promise(function(resolve, reject) {
+  loadUserResultData() {
+    var promise = new Promise((resolve, reject) => {
       var resultsReq = new XMLHttpRequest();
-      resultsReq.onload = function() {
+      resultsReq.onload = () => {
         debugger;
-        self.results = JSON.parse(resultsReq.responseText);
-        resolve(self);
+        this.results = JSON.parse(resultsReq.responseText);
+        resolve(this);
       };
-      resultsReq.onerror = function() {
-        reject(Error("It broke"));
+      resultsReq.onerror = () => {
+        reject(Error('It broke'));
       };
-      resultsReq.open('GET', '/usercart/' + self.username + '/findallcarts');
+      resultsReq.open('GET', '/usercart/' + this.username + '/findallcarts');
       resultsReq.send(null);
-
     });
 
     return promise;
-  },
-
+  }
   // DELETE:Replaced by loadUserResultData using Promise
   // getUserData: function(username, callback) {
   //   var self = this;
@@ -81,8 +67,7 @@ User.prototype = {
   //   xhr.open('GET', '/usercart/' + this.username + '/findallcarts');
   //   xhr.send(null);
   // },
-
-  updateCart: function(result) {
+  updateCart(result) {
     if (this.oldCart == null) {
       this.oldCart = result;
       return;
@@ -91,9 +76,7 @@ User.prototype = {
     if (this.newCart != null) {
       latestCart = this.newCart;
     }
-    var ivnames = variableModels.iVariables.map(function(iv) {
-      return iv.name;
-    });
+    var ivnames = variableModels.iVariables.map(iv => iv.name);
     for (var i = 0; i < ivnames.length; i++) {
       if (result[ivnames[i]] != latestCart[ivnames[i]]) {
         this.oldCart = latestCart;
@@ -101,56 +84,50 @@ User.prototype = {
         return;
       }
     }
-  },
-
-  addResult: function(result, renderCallback) {
-    var self = this;
-    
-    self.updateCart(result);
+  }
+  addResult(result, renderCallback) {
+    this.updateCart(result);
     debugger;
-    var addCartPromise = new Promise(function(resolve, reject) {
+    var addCartPromise = new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
-      xhr.onload = function() { resolve(self); };
-      xhr.error = function() { reject(); };
-      xhr.open('POST', '/usercart/' + self.username + '/addcartdata');
+      xhr.onload = () => {
+        resolve(this);
+      };
+      xhr.error = () => {
+        reject();
+      };
+      xhr.open('POST', '/usercart/' + this.username + '/addcartdata');
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify(result));
     });
 
-    var loadUserCartPromise = addCartPromise.then(function() {
+    var loadUserCartPromise = addCartPromise.then(() => {
       debugger;
-      return self.loadUserResultData();
+      return this.loadUserResultData();
     });
 
     loadUserCartPromise.then(renderCallback);
-  },
-
-  enterChallenge: function(renderCallback) {
+  }
+  enterChallenge(renderCallback) {
     // if (!this.currentChallenge) {
     //   // if the user data are empty, receive it
     //   this.loadAllUserData(renderCallback);
     // } else {
-      renderCallback();
+    renderCallback();
     // }
   }
-
-
-
-
-};
+}
 
 var UserResultData = React.createClass({
-  render: function() {
+  render: function () {
     var user = this.props.user;
     var variableModels = this.props.variableModels;
-    var ivnames = variableModels.iVariables.map(function(iv) {
-      return iv.name;
-    });
+    var ivnames = variableModels.iVariables.map(iv => iv.name);
     var resultsDisplay = [];
     var allDisplay = [user.results.length];
 
     switch (this.props.mode) {
-/*      case 'all':
+      /*      case 'all':
         var results = user.results;
         resultsDisplay = results.map(function(result) {
           var index = result[variableModels.dvResultCount];
@@ -160,25 +137,49 @@ var UserResultData = React.createClass({
       case 'notebook':
         var newDisplay = null;
         var oldDisplay = null;
-        for (var j=0; j < user.results.length; j++) {
+        for (var j = 0; j < user.results.length; j++) {
           var result = user.results[j];
           var isNew = true;
           var isOld = true;
           for (var i = 0; i < ivnames.length; i++) {
-            if ((!user.newCart) || (result[ivnames[i]] != user.newCart[ivnames[i]])) {
+            if (
+              !user.newCart ||
+              result[ivnames[i]] != user.newCart[ivnames[i]]
+            ) {
               isNew = false;
             }
-            if ((!user.oldCart) || (result[ivnames[i]] != user.oldCart[ivnames[i]])) {
+            if (
+              !user.oldCart ||
+              result[ivnames[i]] != user.oldCart[ivnames[i]]
+            ) {
               isOld = false;
             }
           }
           var index = result[variableModels.dvResultCount];
-          allDisplay[index-1] = <UserResult variableModels={variableModels} data={result} index={'#' + index}/>;
+          allDisplay[index - 1] = (
+            <UserResult
+              variableModels={variableModels}
+              data={result}
+              index={'#' + index}
+            />
+          );
 
           if (isNew) {
-            newDisplay = <UserResult variableModels={variableModels} data={result} index={'#' + index + ' (Newly Saved)'}/>;
+            newDisplay = (
+              <UserResult
+                variableModels={variableModels}
+                data={result}
+                index={'#' + index + ' (Newly Saved)'}
+              />
+            );
           } else if (isOld) {
-            oldDisplay = <UserResult variableModels={variableModels} data={result} index={'#' + index + ' (Last Saved)'}/>;
+            oldDisplay = (
+              <UserResult
+                variableModels={variableModels}
+                data={result}
+                index={'#' + index + ' (Last Saved)'}
+              />
+            );
           }
         }
         if (newDisplay) {
@@ -190,56 +191,55 @@ var UserResultData = React.createClass({
         break;
     }
 
-    var headers = variableModels.iVariables.map(function(iv) {
+    var headers = variableModels.iVariables.map(iv => (
       //return <th><VariableImage name={iv.name}/>{iv.label}</th>;
-      return <th>{iv.label}</th>;
-    });
+      <th>{iv.label}</th>
+    ));
 
-    return <table className="result">
-      <thead>
-        <tr>
-          <th>
-          </th>
-          {headers}
-          <th>
-            {variableModels.dvLabel}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {resultsDisplay}
-        <tr><td co={headers.length}>All Results</td></tr>
-        {allDisplay}
-      </tbody>
-    </table>;
+    return (
+      <table className="result">
+        <thead>
+          <tr>
+            <th></th>
+            {headers}
+            <th>{variableModels.dvLabel}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {resultsDisplay}
+          <tr>
+            <td co={headers.length}>All Results</td>
+          </tr>
+          {allDisplay}
+        </tbody>
+      </table>
+    );
   },
 });
 
 var UserResult = React.createClass({
-  render: function() {
+  render: function () {
     var variableModels = this.props.variableModels;
     var data = this.props.data;
     var dvValues = data[variableModels.dvName].join(', ');
     var index = this.props.index;
 
-    var variables = variableModels.iVariables.map(function(variable) {
-      return <UserResultSelection iv={variable} value={data[variable.name]}/>;
-    });
+    var variables = variableModels.iVariables.map(variable => (
+      <UserResultSelection iv={variable} value={data[variable.name]} />
+    ));
 
-    return <tr>
-      <td>
-        Cart {index} :
-      </td>
-      {variables}
-      <td>
-        {dvValues}
-      </td>
-      </tr>;
-  }
+    return (
+      <tr>
+        <td>Cart {index} :</td>
+        {variables}
+        <td>{dvValues}</td>
+      </tr>
+    );
+  },
 });
 
 var UserResultSelection = React.createClass({
-  getDisplayValue: function(value) {
+  getDisplayValue: function (value) {
     var options = this.props.iv.options;
     for (var i = 0; i < options.length; i++) {
       if (options[i].value == value) {
@@ -249,11 +249,9 @@ var UserResultSelection = React.createClass({
     return null;
   },
 
-  render: function() {
+  render: function () {
     var iv = this.props.iv;
     var ivValue = this.getDisplayValue(this.props.value);
     return <td>{ivValue}</td>;
-  }
+  },
 });
-
-

@@ -1,30 +1,28 @@
 package server
 
 import (
+	"context"
 	"encoding/csv"
 	"encoding/json"
-
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 
-	"db"
-	"log"
-	"workflow"
-
-	"appengine"
-	"appengine/datastore"
+	"github.com/toisin/astro-world/auto-agent/db"
+	"github.com/toisin/astro-world/auto-agent/workflow"
+	"google.golang.org/appengine/datastore"
 )
 
 const (
 	APP_NAME = "auto-agent"
 )
 
-func init() {
+func InitHandlers() {
 	http.Handle("/", &StaticHandler{})
 
 	http.Handle(COV, &GetHandler{})
@@ -45,8 +43,6 @@ func init() {
 	http.Handle(CLEARUSERLOGS_REQUEST, &ClearUserLogsDBHandler{})
 	http.Handle(WRITEWORKFLOWTEXT_REQUEST, &WriteWorkflowTextHandler{})
 	http.Handle(DUMPUSERLOGS_REQUEST, &DumpUserLogsHandler{})
-
-	workflow.InitWorkflow()
 }
 
 type TextHandler string
@@ -58,10 +54,12 @@ func (t *TextHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type StaticHandler struct {
 }
 
+const STATIC_ROOT = "auto-agent/static"
+
 func (staticH *StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Note that the path must not start with / for some reasons
 	// i.e. "/static..." does not work. Has to be "static..."
-	http.ServeFile(w, r, "static"+r.URL.Path)
+	http.ServeFile(w, r, STATIC_ROOT+r.URL.Path)
 }
 
 const COV = "/astro-world/"
@@ -95,33 +93,33 @@ type WriteWorkflowTextHandler StaticHandler
 type DumpUserLogsHandler StaticHandler
 
 func (covH *ImportRecordDBHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 	ImportRecordsDB(c)
-	http.ServeFile(w, r, "static/index.html")
+	http.ServeFile(w, r, STATIC_ROOT+"/index.html")
 }
 
 func (covH *ClearAllDBHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 	ClearAllDB(c)
-	http.ServeFile(w, r, "static/index.html")
+	http.ServeFile(w, r, STATIC_ROOT+"/index.html")
 }
 
 func (covH *ClearRecordDBHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 	ClearAllRecordsDB(c)
-	http.ServeFile(w, r, "static/index.html")
+	http.ServeFile(w, r, STATIC_ROOT+"/index.html")
 }
 
 func (covH *ClearAllUsersDBHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 	ClearAllUsersDB(c)
-	http.ServeFile(w, r, "static/index.html")
+	http.ServeFile(w, r, STATIC_ROOT+"/index.html")
 }
 
 func (covH *ClearUserLogsDBHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 	ClearUserLogsDB(c)
-	http.ServeFile(w, r, "static/index.html")
+	http.ServeFile(w, r, STATIC_ROOT+"/index.html")
 }
 
 func (covH *WriteWorkflowTextHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -131,7 +129,7 @@ func (covH *WriteWorkflowTextHandler) ServeHTTP(w http.ResponseWriter, r *http.R
 }
 
 func (covH *GetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
 	// Check if User has logged in (by simply providing a username in the query parameter for now
 	// because we are not checking password at the moment)
@@ -146,35 +144,41 @@ func (covH *GetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Fprint(os.Stderr, "DB Error Getting User:"+err.Error()+"!\n\n")
-			http.ServeFile(w, r, "static/index.html")
+			http.ServeFile(w, r, STATIC_ROOT+"/index.html")
 			return
 		}
 
 		if u.Username == "" {
 			fmt.Fprint(os.Stderr, "User does not exist.\n\n")
 
-			http.ServeFile(w, r, "static/index.html")
+			http.ServeFile(w, r, STATIC_ROOT+"/index.html")
 			return
 		}
 
 		LogUserRequest(c, u, *r, true, "", "")
 
 		if len(r.URL.Path[len(COV):]) != 0 {
-			http.ServeFile(w, r, "static/astro-world"+r.URL.Path)
+
+			fmt.Println("XXX GetHandler 1")
+
+			http.ServeFile(w, r, "auto-agent/static/astro-world"+r.URL.Path)
 			return
 		} else {
-			http.ServeFile(w, r, "static/astro-world/index.html")
+			fmt.Printf("XXX GetHandler 2 %s\n", r.URL.Path)
+			http.ServeFile(w, r, "auto-agent/static/astro-world/index.html")
+			// w.Write([]byte("Hello World!"))
 			return
 		}
 	} else {
-		http.ServeFile(w, r, "static/index.html")
+		fmt.Println("XXX GetHandler 3")
+		http.ServeFile(w, r, STATIC_ROOT+"/index.html")
 		return
 	}
 }
 
 // This is only called after the initial login
 func (covH *HistoryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 	if r.URL.Query()["user"] != nil {
 		// Always handle username in lowercase
 		username := strings.ToLower(r.URL.Query()["user"][0])
@@ -227,7 +231,7 @@ func (covH *HistoryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (covH *RecordsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
 	records, _, err := db.GetAllRecords(c)
 	if err != nil {
@@ -246,7 +250,8 @@ func (covH *RecordsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (newuserH *NewUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	// c := r.Context()
+	c := r.Context()
 
 	if r.FormValue("user") != "" {
 		// Always handle username in lowercase
@@ -293,7 +298,7 @@ func (newuserH *NewUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 }
 
 func (newuserH *GetUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
 	if r.FormValue("user") != "" {
 		// Always handle username in lowercase
@@ -323,7 +328,7 @@ func (newuserH *GetUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 }
 
 func (covH *ResponseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 
 	if r.FormValue("user") != "" {
 		// Always handle username in lowercase
@@ -391,13 +396,13 @@ func (covH *ResponseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		rc2 := rc
 
 		m := []db.Message{
-			db.Message{
+			{
 				Texts:     texts,
 				Mtype:     db.ROBOT,
 				Date:      time.Now(),
 				MessageNo: rc1,
 			},
-			db.Message{
+			{
 				Id:        responseId,
 				Texts:     []string{responseText},
 				Mtype:     db.HUMAN,
@@ -461,7 +466,7 @@ func (covH *ResponseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func LogUserRequest(c appengine.Context, u db.User, r http.Request, isGetRequest bool, rid string, rtext string) {
+func LogUserRequest(c context.Context, u db.User, r http.Request, isGetRequest bool, rid string, rtext string) {
 	promptId, phaseId, questionText, jsonResponse := "", "", "", ""
 	if isGetRequest {
 		if r.URL.Query()["promptId"] != nil {
@@ -483,7 +488,7 @@ func LogUserRequest(c appengine.Context, u db.User, r http.Request, isGetRequest
 		jsonResponse = r.FormValue("jsonResponse")
 	}
 	userlogs := []db.UserLog{
-		db.UserLog{
+		{
 			Username:     u.Username,
 			PromptId:     promptId,
 			PhaseId:      phaseId,
@@ -507,7 +512,7 @@ func LogUserRequest(c appengine.Context, u db.User, r http.Request, isGetRequest
 // DOC
 // Expect the first column to be record number
 // The rest of column headers should match the factor ids in configuration
-func ImportRecordsDB(c appengine.Context) {
+func ImportRecordsDB(c context.Context) {
 
 	q := datastore.NewQuery("Record")
 	rc, err := q.Count(c)
@@ -602,7 +607,7 @@ func ImportRecordsDB(c appengine.Context) {
 	}
 }
 
-func ClearAllDB(c appengine.Context) {
+func ClearAllDB(c context.Context) {
 	DeleteAllEntities(c, "Record")
 	DeleteAllEntities(c, "UserLog")
 	DeleteAllEntities(c, "User")
@@ -610,7 +615,7 @@ func ClearAllDB(c appengine.Context) {
 	DeleteAllEntities(c, "Memo")
 }
 
-func DeleteAllEntities(c appengine.Context, kind string) {
+func DeleteAllEntities(c context.Context, kind string) {
 	q := datastore.NewQuery(kind)
 
 	ks, err := q.KeysOnly().GetAll(c, nil)
@@ -628,7 +633,7 @@ func DeleteAllEntities(c appengine.Context, kind string) {
 	}
 }
 
-func ClearAllRecordsDB(c appengine.Context) {
+func ClearAllRecordsDB(c context.Context) {
 	q := datastore.NewQuery("Record")
 
 	var records []db.Record
@@ -649,7 +654,7 @@ func ClearAllRecordsDB(c appengine.Context) {
 	}
 }
 
-func ClearUserLogsDB(c appengine.Context) {
+func ClearUserLogsDB(c context.Context) {
 	q := datastore.NewQuery("UserLog")
 
 	var logs []db.UserLog
@@ -670,7 +675,7 @@ func ClearUserLogsDB(c appengine.Context) {
 	}
 }
 
-func ClearAllUsersDB(c appengine.Context) {
+func ClearAllUsersDB(c context.Context) {
 	q := datastore.NewQuery("User")
 
 	var us []db.User
@@ -730,7 +735,7 @@ func ClearAllUsersDB(c appengine.Context) {
 }
 
 func (h *DumpUserLogsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := r.Context()
 	q := datastore.NewQuery("UserLog").Order("Username").Order("Date")
 
 	var logs []db.UserLog

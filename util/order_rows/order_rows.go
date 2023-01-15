@@ -6,7 +6,7 @@ import (
 	"sort"
 	"time"
 
-	util ".."
+	"github.com/toisin/astro-world/util"
 )
 
 const (
