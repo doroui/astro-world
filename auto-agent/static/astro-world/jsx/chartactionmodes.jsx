@@ -394,7 +394,7 @@ export class Graph extends React.Component {
     record: null,
   };
 
-  toggleToolbox(col, grade, index, show) {
+  toggleToolbox = (col, grade, index, show) => {
     if (
       col == this.state.toolboxCol &&
       grade == this.state.toolboxGrade &&
@@ -425,7 +425,7 @@ export class Graph extends React.Component {
       };
       this.submitRecordSelect(onComplete);
     }
-  }
+  };
 
   submitRecordSelect(onComplete) {
     var user = this.props.user;
