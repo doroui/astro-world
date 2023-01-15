@@ -37,13 +37,12 @@ var App = React.createClass({
   },
 
   showChallenge: function (e) {
-    var self = this;
-    var renderCallback = function () {
-      switch (self.state.mode) {
+    var renderCallback = () => {
+      switch (this.state.mode) {
         case 1:
         case 3:
         case 4:
-          self.setState({ mode: 5 });
+          this.setState({ mode: 5 });
           break;
       }
     };
@@ -51,14 +50,13 @@ var App = React.createClass({
   },
 
   saveResult: function (e) {
-    var self = this;
-    this.props.user.addResult(this.state.newResult, function () {
-      switch (self.state.mode) {
+    this.props.user.addResult(this.state.newResult, () => {
+      switch (this.state.mode) {
         case 1:
-          self.setState({ mode: 4 });
+          this.setState({ mode: 4 });
           break;
         case 3:
-          self.setState({ mode: 4 });
+          this.setState({ mode: 4 });
           break;
       }
     });

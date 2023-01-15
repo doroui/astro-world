@@ -135,7 +135,7 @@ export function Chart(props) {
 function Diamond(props) {
   var h = rectSize / 2;
 
-  var toggleToolbox = function () {
+  var toggleToolbox = () => {
     props.onDiamondClick(props.col, props.grade, props.rIndex, true);
   };
 
@@ -419,10 +419,9 @@ export class Graph extends React.Component {
       var record = allRecords[grade].Records[this.props.colFilters[col]][index];
 
       this.state.record = record;
-      var self = this;
-      var onComplete = function () {
-        self.setState(self.state);
-        self.props.app.refreshDialog();
+      var onComplete = () => {
+        this.setState(this.state);
+        this.props.app.refreshDialog();
       };
       this.submitRecordSelect(onComplete);
     }
@@ -811,27 +810,26 @@ export class ChartButtons extends React.Component {
   }
 
   render() {
-    var self = this;
     var state = this.state;
     var user = this.props.user;
     var app = this.props.app;
-    var fitnessOnClick = function () {
-      self.changeState(self.props.fitness);
+    var fitnessOnClick = () => {
+      this.changeState(this.props.fitness);
     };
-    var parentshealthOnClick = function () {
-      self.changeState(self.props.parentshealth);
+    var parentshealthOnClick = () => {
+      this.changeState(this.props.parentshealth);
     };
-    var familysizeOnClick = function () {
-      self.changeState(self.props.familysize);
+    var familysizeOnClick = () => {
+      this.changeState(this.props.familysize);
     };
-    var educationOnClick = function () {
-      self.changeState(self.props.education);
+    var educationOnClick = () => {
+      this.changeState(this.props.education);
     };
-    var homeclimateOnClick = function () {
-      self.changeState(self.props.homeclimate);
+    var homeclimateOnClick = () => {
+      this.changeState(this.props.homeclimate);
     };
-    var hideChartOnClick = function () {
-      self.changeState(null);
+    var hideChartOnClick = () => {
+      this.changeState(null);
     };
 
     if (state.showChart) {

@@ -7,9 +7,9 @@ export class IndependentVariable extends React.Component {
     var iv = this.props.iv;
     var name = iv.name;
     var handleChange = this.handleChange;
-    var options = iv.options.map(function (option) {
-      return <IndependentVariableOption name={name} ivOption={option} />;
-    });
+    var options = iv.options.map(option => (
+      <IndependentVariableOption name={name} ivOption={option} />
+    ));
 
     return (
       <tr className="iv">
@@ -69,10 +69,9 @@ export class Request extends React.Component {
     if (!this.isEnabled()) return;
 
     var xhr = new XMLHttpRequest();
-    var self = this;
-    xhr.onload = function () {
-      if (self.props.onComplete) {
-        self.props.onComplete(JSON.parse(xhr.responseText));
+    xhr.onload = () => {
+      if (this.props.onComplete) {
+        this.props.onComplete(JSON.parse(xhr.responseText));
       }
     };
     xhr.open('POST', '/carts/gettrips');
@@ -94,11 +93,9 @@ export class Request extends React.Component {
   }
 
   render() {
-    var variables = this.props.variableModels.iVariables.map(function (
-      variable,
-    ) {
-      return <IndependentVariable iv={variable} />;
-    });
+    var variables = this.props.variableModels.iVariables.map(variable => (
+      <IndependentVariable iv={variable} />
+    ));
 
     return (
       <form
@@ -128,9 +125,9 @@ export class Result extends React.Component {
     var data = this.props.data;
     var dvValues = data[variableModels.dvName].join(', ');
 
-    var variables = variableModels.iVariables.map(function (variable) {
-      return <ResultSelection iv={variable} value={data[variable.name]} />;
-    });
+    var variables = variableModels.iVariables.map(variable => (
+      <ResultSelection iv={variable} value={data[variable.name]} />
+    ));
 
     return (
       <table className="result">

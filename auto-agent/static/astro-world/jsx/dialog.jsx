@@ -68,10 +68,9 @@ export class Dialog extends React.Component {
     }
 
     this.state.welcomeText = 'Welcome to Phase ' + phaseno + '.';
-    var self = this;
     var user = this.props.user;
-    var onComplete = function () {
-      self.setState(self.state);
+    var onComplete = () => {
+      this.setState(this.state);
     };
     var response = {};
     var jsonResponse = JSON.stringify(response);
@@ -110,15 +109,14 @@ export class Dialog extends React.Component {
     var prompt = user.getPrompt();
     var welcomeText = this.state.welcomeText;
 
-    var self = this;
-    var phaseILink = function () {
-      self.gotoPhase('Cov');
+    var phaseILink = () => {
+      this.gotoPhase('Cov');
     };
-    var phaseIILink = function () {
-      self.gotoPhase('Chart');
+    var phaseIILink = () => {
+      this.gotoPhase('Chart');
     };
-    var phaseIIILink = function () {
-      self.gotoPhase('Prediction');
+    var phaseIIILink = () => {
+      this.gotoPhase('Prediction');
     };
 
     var helpText = this.state.showPhaseLinks ? (

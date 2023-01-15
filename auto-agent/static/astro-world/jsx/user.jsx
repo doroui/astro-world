@@ -87,34 +87,32 @@ export class User {
     this.AllPerformanceRecords = j;
   }
   loadHistory() {
-    var self = this;
     var promise = new Promise((resolve, reject) => {
       var historyReq = new XMLHttpRequest();
-      historyReq.onload = function () {
-        self.updateUser(JSON.parse(historyReq.responseText));
+      historyReq.onload = () => {
+        this.updateUser(JSON.parse(historyReq.responseText));
         resolve();
       };
-      historyReq.onerror = function () {
+      historyReq.onerror = () => {
         reject(Error('It broke'));
       };
-      historyReq.open('GET', 'history?user=' + self.Username);
+      historyReq.open('GET', 'history?user=' + this.Username);
       historyReq.send(null);
     });
 
     return promise;
   }
   loadAllPerformanceRecords() {
-    var self = this;
     var promise = new Promise((resolve, reject) => {
       var recordsReq = new XMLHttpRequest();
-      recordsReq.onload = function () {
-        self.updateAllPerformanceRecords(JSON.parse(recordsReq.responseText));
+      recordsReq.onload = () => {
+        this.updateAllPerformanceRecords(JSON.parse(recordsReq.responseText));
         resolve();
       };
-      recordsReq.onerror = function () {
+      recordsReq.onerror = () => {
         reject(Error('It broke'));
       };
-      recordsReq.open('GET', 'records?user=' + self.Username);
+      recordsReq.open('GET', 'records?user=' + this.Username);
       recordsReq.send(null);
     });
 
@@ -123,7 +121,6 @@ export class User {
   //After submitting the response
   //Update user with new history etc.
   submitResponse(_promptId, _phaseId, jsonResponse, renderCallback) {
-    var self = this;
     // var text = value;
     var question = this.CurrentUIPrompt.Texts;
     var jsonQuestion = JSON.stringify(question); // Turns the texts array into json
@@ -140,11 +137,11 @@ export class User {
 
     var responsePromise = new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        self.updateUser(JSON.parse(xhr.responseText));
+      xhr.onload = () => {
+        this.updateUser(JSON.parse(xhr.responseText));
         resolve();
       };
-      xhr.error = function () {
+      xhr.error = () => {
         reject();
       };
       xhr.open('POST', 'sendresponse');

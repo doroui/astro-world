@@ -14,7 +14,7 @@ export class User {
     //   self.loadUserResultData();
     // });
     var cartPromise = self.loadUserResultData();
-    cartPromise.then(renderCallback, function (error) {
+    cartPromise.then(renderCallback, error => {
       console.error('Failed!', error);
     });
   }
@@ -22,13 +22,13 @@ export class User {
   //     this is called from Promise
   loadUserChallengeData() {
     var self = this;
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise((resolve, reject) => {
       var challengeReq = new XMLHttpRequest();
-      challengeReq.onload = function () {
+      challengeReq.onload = () => {
         //self.results = JSON.parse(challengeReq.responseText);
         resolve(self);
       };
-      challengeReq.onerror = function () {
+      challengeReq.onerror = () => {
         reject(Error('It broke'));
       };
       challengeReq.open(
@@ -44,14 +44,14 @@ export class User {
   //     this is called from Promise
   loadUserResultData() {
     var self = this;
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise((resolve, reject) => {
       var resultsReq = new XMLHttpRequest();
-      resultsReq.onload = function () {
+      resultsReq.onload = () => {
         debugger;
         self.results = JSON.parse(resultsReq.responseText);
         resolve(self);
       };
-      resultsReq.onerror = function () {
+      resultsReq.onerror = () => {
         reject(Error('It broke'));
       };
       resultsReq.open('GET', '/usercart/' + self.username + '/findallcarts');
@@ -80,9 +80,7 @@ export class User {
     if (this.newCart != null) {
       latestCart = this.newCart;
     }
-    var ivnames = variableModels.iVariables.map(function (iv) {
-      return iv.name;
-    });
+    var ivnames = variableModels.iVariables.map(iv => iv.name);
     for (var i = 0; i < ivnames.length; i++) {
       if (result[ivnames[i]] != latestCart[ivnames[i]]) {
         this.oldCart = latestCart;
@@ -96,12 +94,12 @@ export class User {
 
     self.updateCart(result);
     debugger;
-    var addCartPromise = new Promise(function (resolve, reject) {
+    var addCartPromise = new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
-      xhr.onload = function () {
+      xhr.onload = () => {
         resolve(self);
       };
-      xhr.error = function () {
+      xhr.error = () => {
         reject();
       };
       xhr.open('POST', '/usercart/' + self.username + '/addcartdata');
@@ -109,7 +107,7 @@ export class User {
       xhr.send(JSON.stringify(result));
     });
 
-    var loadUserCartPromise = addCartPromise.then(function () {
+    var loadUserCartPromise = addCartPromise.then(() => {
       debugger;
       return self.loadUserResultData();
     });
@@ -130,9 +128,7 @@ var UserResultData = React.createClass({
   render: function () {
     var user = this.props.user;
     var variableModels = this.props.variableModels;
-    var ivnames = variableModels.iVariables.map(function (iv) {
-      return iv.name;
-    });
+    var ivnames = variableModels.iVariables.map(iv => iv.name);
     var resultsDisplay = [];
     var allDisplay = [user.results.length];
 
@@ -201,10 +197,10 @@ var UserResultData = React.createClass({
         break;
     }
 
-    var headers = variableModels.iVariables.map(function (iv) {
+    var headers = variableModels.iVariables.map(iv => (
       //return <th><VariableImage name={iv.name}/>{iv.label}</th>;
-      return <th>{iv.label}</th>;
-    });
+      <th>{iv.label}</th>
+    ));
 
     return (
       <table className="result">
@@ -234,9 +230,9 @@ var UserResult = React.createClass({
     var dvValues = data[variableModels.dvName].join(', ');
     var index = this.props.index;
 
-    var variables = variableModels.iVariables.map(function (variable) {
-      return <UserResultSelection iv={variable} value={data[variable.name]} />;
-    });
+    var variables = variableModels.iVariables.map(variable => (
+      <UserResultSelection iv={variable} value={data[variable.name]} />
+    ));
 
     return (
       <tr>

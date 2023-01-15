@@ -265,8 +265,6 @@ export class SelectTeam extends React.Component {
   };
 
   render() {
-    var self = this;
-
     var user = this.props.user;
     var isSummary = this.props.isSummary;
 
@@ -279,8 +277,8 @@ export class SelectTeam extends React.Component {
     var phaseId = user.getCurrentPhaseId();
 
     var applicants = user.getState().AllPredictionRecords.map((record, i) => {
-      var recordOnClick = function () {
-        self.showRecord(record);
+      var recordOnClick = () => {
+        this.showRecord(record);
       };
       if (isSummary) {
         var isSelectedRecord = record.IsSelected ? (
@@ -323,17 +321,17 @@ export class SelectTeam extends React.Component {
       );
     });
 
-    var recordDetails = self.state.showRecord ? (
+    var recordDetails = this.state.showRecord ? (
       <div className="no-border-frame">
         <div className="hbox">
           <PredictionRecord
             user={user}
-            record={self.state.record}
+            record={this.state.record}
             showPerformancePrediction
-            key={self.state.record.RecordNo}
+            key={this.state.record.RecordNo}
           />
         </div>
-        <button autoFocus onClick={self.hideRecord}>
+        <button autoFocus onClick={this.hideRecord}>
           Hide Record
         </button>
       </div>
@@ -400,15 +398,14 @@ export class PredictionRecord extends React.Component {
 
     record = record ? record : user.getState().TargetPrediction;
 
-    var recordDetails = function (r) {
-      var performancePrediction = function (rr) {
-        return showPerformancePrediction ? (
+    var recordDetails = r => {
+      var performancePrediction = rr =>
+        showPerformancePrediction ? (
           <p className="predicted-performance-level">
             You predicted {rr.RecordName}&apos;s performance to be:
             <span className="grade">{rr.PredictedPerformance}</span>
           </p>
         ) : null;
-      };
 
       var factorOrder = [];
       var tempfactors = user.getState().DisplayFactors.map((v, i) => {

@@ -9,13 +9,12 @@
 // User.prototype = {
 
 //   loadAllUserData: function(renderCallback) {
-//     var self = this;
-//     var cartPromise = self.loadUserResultData(self.username);
+//     var cartPromise = this.loadUserResultData(this.username);
 
-//     var challengePromise = cartPromise.then(function(username) {
-//                                               return self.loadUserChallengeData(username);
+//     var challengePromise = cartPromise.then((username) =>{
+//                                               return this.loadUserChallengeData(username);
 //                                             });
-//     challengePromise.then(renderCallback, function(error) {
+//     challengePromise.then(renderCallback, (error) =>{
 //                                             console.error("Failed!", error);
 //                                           });
 //   },
@@ -48,10 +47,9 @@ export class Challenge extends React.Component {
       return;
 
     var xhr = new XMLHttpRequest();
-    var self = this;
-    xhr.onload = function() {
-      if (self.props.onComplete) {
-        self.props.onComplete(JSON.parse(xhr.responseText));
+    xhr.onload = () => {
+      if (this.props.onComplete) {
+        this.props.onComplete(JSON.parse(xhr.responseText));
       }
     };
     xhr.open('POST', '/carts/gettrips');
@@ -67,15 +65,11 @@ export class Challenge extends React.Component {
   render() {
     var user = this.props.user;
     var variableModels = this.props.variableModels;
-    var ivnames = variableModels.iVariables.map(function (iv) {
-      return iv.name;
-    });
+    var ivnames = variableModels.iVariables.map(iv => iv.name);
 
-    var variables = this.props.variableModels.iVariables.map(function (
-      variable,
-    ) {
-      return <IndependentVariable iv={variable} />;
-    });
+    var variables = this.props.variableModels.iVariables.map(variable => (
+      <IndependentVariable iv={variable} />
+    ));
 
     switch (this.state.mode) {
       default:

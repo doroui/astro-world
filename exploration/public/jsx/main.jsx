@@ -48,7 +48,7 @@ if (!username) {
   var user = new User(username);
 
   user.loadAllUserData(
-    (callback = function () {
+    (callback = () => {
       React.render(
         <App variableModels={variableModels} user={user} />,
         document.body,
@@ -58,6 +58,4 @@ if (!username) {
 }
 
 // TODO
-window.onbeforeunload = function () {
-  return '';
-};
+window.onbeforeunload = () => '';

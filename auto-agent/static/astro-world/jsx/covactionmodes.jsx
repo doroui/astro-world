@@ -521,16 +521,15 @@ export class RecordPerformance extends React.Component {
       </div>
     ) : null;
 
-    var performance = function (r) {
-      return !hidePerformance ? (
+    var performance = r =>
+      !hidePerformance ? (
         <p className="performance-level">
           Performance Level:
           <span className="grade">{r.Performance}</span>
         </p>
       ) : null;
-    };
 
-    var recordDetails = function (r) {
+    var recordDetails = r => {
       var factorOrder = [];
       var tempfactors = Object.keys(user.getContentFactors()).map((fkey, i) => {
         var factor = user.getContentFactors()[fkey];

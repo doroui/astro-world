@@ -6,7 +6,6 @@ export class App extends React.Component {
   state = {mode: 0, actionReady: false};
 
   showAction = () => {
-    var self = this;
     var user = this.props.user;
     // In cases when the dialog is ongoing and no UI action is needed
     // No need to re-render the action frame. This allows the last
@@ -24,8 +23,8 @@ export class App extends React.Component {
               var performanceRecordsPromise = user.loadAllPerformanceRecords();
               performanceRecordsPromise.then(
                 () => {
-                  self.state.actionReady = true;
-                  self.setState(self.state);
+                  this.state.actionReady = true;
+                  this.setState(this.state);
                 },
                 error => {
                   console.error('Failed to all performance records!', error);
