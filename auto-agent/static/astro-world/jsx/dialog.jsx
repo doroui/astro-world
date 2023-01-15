@@ -44,14 +44,14 @@ export class Dialog extends React.Component {
     var app = this.props.app;
     app.showAction();
   };
-  togglePhaseLinks(event) {
+  togglePhaseLinks = event => {
     if (event) {
       event.preventDefault();
     }
 
     this.state.showPhaseLinks = !this.state.showPhaseLinks;
     this.setState(this.state);
-  }
+  };
   gotoPhase(phase) {
     this.state.showPhaseLinks = false;
     var phaseno = '';
