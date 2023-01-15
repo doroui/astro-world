@@ -7,13 +7,11 @@ export class User {
     this.currentChallenge = null;
   }
   loadAllUserData(renderCallback) {
-    var self = this;
-
     //var challengePromise = self.loadUserChallengeData();
     // var cartPromise = challengePromise.then(function() {
     //   self.loadUserResultData();
     // });
-    var cartPromise = self.loadUserResultData();
+    var cartPromise = this.loadUserResultData();
     cartPromise.then(renderCallback, error => {
       console.error('Failed!', error);
     });
@@ -21,19 +19,18 @@ export class User {
   // passing in self because otherwise, the scope can be screwed up if
   //     this is called from Promise
   loadUserChallengeData() {
-    var self = this;
     var promise = new Promise((resolve, reject) => {
       var challengeReq = new XMLHttpRequest();
       challengeReq.onload = () => {
         //self.results = JSON.parse(challengeReq.responseText);
-        resolve(self);
+        resolve(this);
       };
       challengeReq.onerror = () => {
         reject(Error('It broke'));
       };
       challengeReq.open(
         'GET',
-        '/userchallenge/' + self.username + '/findallchallenges',
+        '/userchallenge/' + this.username + '/findallchallenges',
       );
       challengeReq.send(null);
     });
@@ -43,18 +40,17 @@ export class User {
   // passing in self because otherwise, the scope can be screwed up if
   //     this is called from Promise
   loadUserResultData() {
-    var self = this;
     var promise = new Promise((resolve, reject) => {
       var resultsReq = new XMLHttpRequest();
       resultsReq.onload = () => {
         debugger;
-        self.results = JSON.parse(resultsReq.responseText);
-        resolve(self);
+        this.results = JSON.parse(resultsReq.responseText);
+        resolve(this);
       };
       resultsReq.onerror = () => {
         reject(Error('It broke'));
       };
-      resultsReq.open('GET', '/usercart/' + self.username + '/findallcarts');
+      resultsReq.open('GET', '/usercart/' + this.username + '/findallcarts');
       resultsReq.send(null);
     });
 
@@ -90,26 +86,24 @@ export class User {
     }
   }
   addResult(result, renderCallback) {
-    var self = this;
-
-    self.updateCart(result);
+    this.updateCart(result);
     debugger;
     var addCartPromise = new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
       xhr.onload = () => {
-        resolve(self);
+        resolve(this);
       };
       xhr.error = () => {
         reject();
       };
-      xhr.open('POST', '/usercart/' + self.username + '/addcartdata');
+      xhr.open('POST', '/usercart/' + this.username + '/addcartdata');
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify(result));
     });
 
     var loadUserCartPromise = addCartPromise.then(() => {
       debugger;
-      return self.loadUserResultData();
+      return this.loadUserResultData();
     });
 
     loadUserCartPromise.then(renderCallback);
