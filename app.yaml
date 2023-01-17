@@ -1,4 +1,5 @@
 runtime: go115 # or another supported version
 main: auto-agent
+app_engine_apis: true
 skip_files:
   - .*/node_modules/.*
